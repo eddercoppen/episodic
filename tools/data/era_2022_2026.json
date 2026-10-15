@@ -1,0 +1,576 @@
+[
+  {
+    "show": "This American Life",
+    "title": "774: The Pink House at the Center of the World",
+    "year": 2022,
+    "genre": "News",
+    "why": "Recorded inside Mississippi's last abortion clinic as Roe v. Wade fell, it earned a Peabody for capturing a historic day from the ground floor.",
+    "sources": [
+      "https://www.thisamericanlife.org/774/the-pink-house-at-the-center-of-the-world",
+      "https://www.podcastnewsdaily.com/news/three-podcasts-win-peabody-awards-on-the-media-this-american-live-and-stolen/article_f79cab54-f0e0-11ed-8a0f-d39cb4320708.html",
+      "https://peabodyawards.com/?p=17415"
+    ]
+  },
+  {
+    "show": "Serial",
+    "title": "Adnan Is Out",
+    "year": 2022,
+    "genre": "True Crime",
+    "why": "Eight years after the show made Adnan Syed's case famous, this short update on his release from prison brought Serial's original story back into the headlines.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Serial_(podcast)",
+      "https://thepodcastmovement.beehiiv.com/p/33-best-episodes-2022"
+    ]
+  },
+  {
+    "show": "Archetypes",
+    "title": "The Misconception of Ambition with Serena Williams",
+    "year": 2022,
+    "genre": "Interview",
+    "why": "Meghan Markle's debut episode with Serena Williams shot to number one on Spotify in several countries, and her personal revelations drew tabloid coverage and plenty of argument.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Archetypes_(podcast)",
+      "https://www.buzzfeednews.com/article/ellievhall/meghan-markle-serena-williams-podcast-interview"
+    ]
+  },
+  {
+    "show": "The Joe Rogan Experience",
+    "title": "#1863 - Mark Zuckerberg",
+    "year": 2022,
+    "genre": "Tech",
+    "why": "Zuckerberg's account of Facebook limiting the Hunter Biden laptop story after an FBI warning became a political flashpoint, and Republicans called for him to testify.",
+    "sources": [
+      "https://thetvdb.com/series/joe-rogan-experience/episodes/9400381",
+      "https://www.theregister.com/2022/08/26/facebook_joe_rogan/",
+      "https://news.yahoo.com/republicans-demand-zuckerberg-called-congress-151318818.html?fr=sycsrp_catchall"
+    ]
+  },
+  {
+    "show": "Huberman Lab",
+    "title": "What Alcohol Does to Your Body, Brain & Health",
+    "year": 2022,
+    "genre": "Science",
+    "why": "This sober look at drinking became Apple Podcasts' most shared episode in the US the following year and fed a broader cultural shift toward drinking less.",
+    "sources": [
+      "https://www.hubermanlab.com/episode/what-alcohol-does-to-your-body-brain-health",
+      "https://www.apple.com/newsroom/2023/11/apple-shares-the-most-popular-podcasts-of-2023/",
+      "https://apple.com/uk/newsroom/2023/11/apple-shares-the-most-popular-podcasts-of-2023"
+    ]
+  },
+  {
+    "show": "Sold a Story",
+    "title": "The Problem",
+    "year": 2022,
+    "genre": "News",
+    "why": "The opener of Emily Hanford's investigation into how schools teach reading set off a national debate over literacy and was among Apple's most shared episodes of 2023.",
+    "sources": [
+      "https://features.apmreports.org/sold-a-story/",
+      "https://www.apple.com/newsroom/2023/11/apple-shares-the-most-popular-podcasts-of-2023/",
+      "https://peabodyawards.com/?p=17415"
+    ]
+  },
+  {
+    "show": "The Dropout",
+    "title": "Sentenced",
+    "year": 2022,
+    "genre": "True Crime",
+    "why": "ABC's long-running Theranos podcast closed with the sentencing of Elizabeth Holmes and Sunny Balwani and appeared on year-end best-episode roundups.",
+    "sources": [
+      "https://thepodcastmovement.beehiiv.com/p/33-best-episodes-2022"
+    ]
+  },
+  {
+    "show": "In Our Time",
+    "title": "The Sistine Chapel",
+    "year": 2022,
+    "genre": "History",
+    "why": "Melvyn Bragg's tour of Michelangelo's ceiling was singled out as one of the standout single episodes of 2022.",
+    "sources": [
+      "https://thepodcastmovement.beehiiv.com/p/33-best-episodes-2022"
+    ]
+  },
+  {
+    "show": "The Tim Ferriss Show",
+    "title": "#607: Luis von Ahn",
+    "year": 2022,
+    "genre": "Business",
+    "why": "Duolingo's co-founder explained how he built a mission-driven company and took it public, and the conversation was named one of the best episodes of 2022.",
+    "sources": [
+      "https://thepodcastmovement.beehiiv.com/p/33-best-episodes-2022"
+    ]
+  },
+  {
+    "show": "The Diary of a CEO",
+    "title": "E195: Bumble Founder",
+    "year": 2022,
+    "genre": "Business",
+    "why": "Whitney Wolfe Herd's account of leaving Tinder and building Bumble against heavy odds made the 2022 best-episode roundups.",
+    "sources": [
+      "https://thepodcastmovement.beehiiv.com/p/33-best-episodes-2022"
+    ]
+  },
+  {
+    "show": "How to Fail with Elizabeth Day",
+    "title": "S15 E9: Greta Thunberg",
+    "year": 2022,
+    "genre": "Interview",
+    "why": "A rare relaxed conversation with Greta Thunberg about the climate crisis and personal failure was highlighted among 2022's best single episodes.",
+    "sources": [
+      "https://thepodcastmovement.beehiiv.com/p/33-best-episodes-2022"
+    ]
+  },
+  {
+    "show": "Hard Fork",
+    "title": "The Bing Who Loved Me + Elon Rewrites the Algorithm",
+    "year": 2023,
+    "genre": "Tech",
+    "why": "Kevin Roose unpacked his unsettling conversation with Bing's 'Sydney' persona, one of the defining AI stories of early 2023.",
+    "sources": [
+      "https://www.thetvdb.com/series/hard-frok-podcast/allseasons/official",
+      "https://en.wikipedia.org/wiki/Kevin_Roose"
+    ]
+  },
+  {
+    "show": "Wiser Than Me with Julia Louis-Dreyfus",
+    "title": "Julia Gets Wise with Jane Fonda",
+    "year": 2023,
+    "genre": "Interview",
+    "why": "The launch episode of an Ambie-winning interview show became Apple's second most shared episode of 2023 in the US.",
+    "sources": [
+      "https://www.apple.com/newsroom/2023/11/apple-shares-the-most-popular-podcasts-of-2023/",
+      "https://podnews.net/press-release/ambies-winners-2024"
+    ]
+  },
+  {
+    "show": "The Daily",
+    "title": "The Fight Over Phonics",
+    "year": 2023,
+    "genre": "News",
+    "why": "A deep dive into the reading-instruction wars that ranked among Apple Podcasts' most shared US episodes of 2023.",
+    "sources": [
+      "https://www.apple.com/newsroom/2023/11/apple-shares-the-most-popular-podcasts-of-2023/"
+    ]
+  },
+  {
+    "show": "Hidden Brain",
+    "title": "The Paradox of Pleasure",
+    "year": 2023,
+    "genre": "Science",
+    "why": "Shankar Vedantam's look at why constant gratification leaves people unhappy was one of the most shared episodes on Apple Podcasts in 2023.",
+    "sources": [
+      "https://www.apple.com/newsroom/2023/11/apple-shares-the-most-popular-podcasts-of-2023/",
+      "https://hiddenbrain.org/podcast/the-paradox-of-pleasure/"
+    ]
+  },
+  {
+    "show": "The Mel Robbins Podcast",
+    "title": "The 'Let Them Theory': A Life Changing Mindset Hack That 15 Million People Can't Stop Talking About",
+    "year": 2023,
+    "genre": "Culture",
+    "why": "The episode turned a two-word idea into a viral self-help mantra that later became a bestselling book, and it was among Apple's most shared episodes of the year.",
+    "sources": [
+      "https://www.apple.com/newsroom/2023/11/apple-shares-the-most-popular-podcasts-of-2023/",
+      "https://thetvdb.com/series/the-mel-robbins-podcast/allseasons/official"
+    ]
+  },
+  {
+    "show": "The Retrievals",
+    "title": "The Patients",
+    "year": 2023,
+    "genre": "Narrative",
+    "why": "The opening chapter of Serial Productions' story about patients who were denied pain relief at a Yale fertility clinic topped share charts and landed on critics' best-of lists.",
+    "sources": [
+      "https://www.apple.com/newsroom/2023/11/apple-shares-the-most-popular-podcasts-of-2023/",
+      "https://www.yearendlists.com/2023/laura-jane-standley-the-25-best-podcasts-of-2023"
+    ]
+  },
+  {
+    "show": "Just B with Bethenny Frankel",
+    "title": "Reality Reckoning: Rachel Leviss (Part One)",
+    "year": 2023,
+    "genre": "Culture",
+    "why": "Rachel Leviss's first long interview after the Vanderpump Rules 'Scandoval' affair was a pop-culture event and one of Apple's most shared US episodes of 2023.",
+    "sources": [
+      "https://www.apple.com/newsroom/2023/11/apple-shares-the-most-popular-podcasts-of-2023/"
+    ]
+  },
+  {
+    "show": "The Witch Trials of J.K. Rowling",
+    "title": "Plotted In Darkness",
+    "year": 2023,
+    "genre": "Culture",
+    "why": "This much-argued-over series on Rowling and the trans debate put this episode among the UK's most shared on Apple Podcasts in 2023.",
+    "sources": [
+      "https://apple.com/uk/newsroom/2023/11/apple-shares-the-most-popular-podcasts-of-2023"
+    ]
+  },
+  {
+    "show": "The Rest Is History",
+    "title": "Oppenheimer: The Father of the Atom Bomb",
+    "year": 2023,
+    "genre": "History",
+    "why": "Released into the Oppenheimer film craze, this history special became one of the UK's most shared Apple Podcasts episodes of 2023.",
+    "sources": [
+      "https://apple.com/uk/newsroom/2023/11/apple-shares-the-most-popular-podcasts-of-2023"
+    ]
+  },
+  {
+    "show": "Hard Fork",
+    "title": "Emergency Pod: Sam Altman is Out at Open AI",
+    "year": 2023,
+    "genre": "Tech",
+    "why": "Recorded within hours of OpenAI's board firing its CEO, this emergency episode became a go-to explainer for the tech story of the year.",
+    "sources": [
+      "https://www.thetvdb.com/series/hard-frok-podcast/allseasons/official"
+    ]
+  },
+  {
+    "show": "The Diary of a CEO",
+    "title": "E209: Doctor Tim Spector: The Shocking New Truth About Weight Loss, Calories & Diets!",
+    "year": 2023,
+    "genre": "Science",
+    "why": "Tim Spector's attack on calorie-counting orthodoxy was the most shared Apple Podcasts episode in the UK in 2023.",
+    "sources": [
+      "https://apple.com/uk/newsroom/2023/11/apple-shares-the-most-popular-podcasts-of-2023"
+    ]
+  },
+  {
+    "show": "Club Shay Shay",
+    "title": "Katt Williams",
+    "year": 2024,
+    "genre": "Comedy",
+    "why": "Katt Williams's scorched-earth takedowns of fellow comedians drew millions of views within a day, set off a wave of memes and responses, and was parodied on SNL.",
+    "sources": [
+      "https://thetvdb.com/series/club-shay-shay/episodes/10225812",
+      "https://knowyourmeme.com/memes/katt-williams-shannon-sharpe-interview",
+      "https://en.wikipedia.org/wiki/Club_Shay_Shay",
+      "https://avclub.com/katt-williams-shannon-sharpe-club-shay-shay-podcast-1851141712"
+    ]
+  },
+  {
+    "show": "The Ezra Klein Show",
+    "title": "Democrats Have a Better Option Than Biden",
+    "year": 2024,
+    "genre": "News",
+    "why": "Klein's monologue arguing Democrats should replace Biden through an open convention looked eccentric in February and prescient by July, and it shaped the debate that followed.",
+    "sources": [
+      "https://www.globalplayer.com/podcasts/episodes/7DrisS4",
+      "https://unherd.com/newsroom/ezra-klein-another-democrat-calls-for-biden-to-step-down/",
+      "https://thetvdb.com/series/the-ezra-klein-show-podcast/seasons/official/2024"
+    ]
+  },
+  {
+    "show": "Mind the Game",
+    "title": "What Makes a Great Basketball Player?",
+    "year": 2024,
+    "genre": "Sports",
+    "why": "LeBron James's debut as a basketball-nerd podcaster alongside JJ Redick was widely covered, and Redick was soon hired to coach James's Lakers.",
+    "sources": [
+      "https://thetvdb.com/series/mind-the-game/episodes/10392314",
+      "https://awfulannouncing.com/podcasts/lebron-james-jj-redick-launching-show.html",
+      "https://en.wikipedia.org/wiki/Mind_the_Game"
+    ]
+  },
+  {
+    "show": "Huberman Lab",
+    "title": "Dr. Stacy Sims: Female-Specific Exercise & Nutrition for Health, Performance & Longevity",
+    "year": 2024,
+    "genre": "Science",
+    "why": "Stacy Sims's case that women shouldn't train and eat like small men resonated widely and stayed on Apple's most-shared charts in both 2024 and 2025.",
+    "sources": [
+      "https://www.hubermanlab.com/episode/dr-stacy-sims-female-specific-exercise-nutrition-for-health-performance-longevity",
+      "https://appleinsider.com/articles/24/11/19/top-apple-podcast-charts-for-2024-show-what-everyones-been-listening-to",
+      "https://www.apple.com/au/newsroom/2025/11/apple-podcasts-unveils-the-most-popular-shows-and-trends-of-2025"
+    ]
+  },
+  {
+    "show": "The Tucker Carlson Show",
+    "title": "Calley & Casey Means: The Truth About Ozempic, the Pill, and How Big Pharma Keeps You Sick",
+    "year": 2024,
+    "genre": "Interview",
+    "why": "The Means siblings' attack on the medical establishment was Apple's most shared US episode of 2024 and helped bring their 'MAHA' movement into the mainstream.",
+    "sources": [
+      "https://appleinsider.com/articles/24/11/19/top-apple-podcast-charts-for-2024-show-what-everyones-been-listening-to"
+    ]
+  },
+  {
+    "show": "The Mel Robbins Podcast",
+    "title": "The #1 Menopause Doctor: How to Lose Belly Fat, Sleep Better, & Stop Suffering Now",
+    "year": 2024,
+    "genre": "Science",
+    "why": "Part of a wave of menopause conversations reaching big audiences, this episode was Apple's second most shared in the US in 2024.",
+    "sources": [
+      "https://appleinsider.com/articles/24/11/19/top-apple-podcast-charts-for-2024-show-what-everyones-been-listening-to"
+    ]
+  },
+  {
+    "show": "Lex Fridman Podcast",
+    "title": "#442 – Donald Trump Interview",
+    "year": 2024,
+    "genre": "News",
+    "why": "One of the first stops on Trump's 2024 podcast tour, its remarks about the 2020 election drew wide press coverage.",
+    "sources": [
+      "https://lexfridman.com/donald-trump/",
+      "https://www.allsides.com/news/2024-09-04-0518/donald-trump-five-takeaways-trump-s-lex-fridman-podcast-interview",
+      "https://voz.us/en/politics/240904/16070/trump-tells-lex-fridman-that-he-lost-the-2020-election-by-whisker"
+    ]
+  },
+  {
+    "show": "This Past Weekend w/ Theo Von",
+    "title": "E526 Donald Trump",
+    "year": 2024,
+    "genre": "Comedy",
+    "why": "Trump's freewheeling sit-down with Theo Von sent the show to number one on Spotify and became a leading example of the 'manosphere' podcast strategy.",
+    "sources": [
+      "https://thetvdb.com/series/this-past-weekend/episodes/11182381",
+      "https://soundstudiesblog.com/tag/theo-von/",
+      "https://www.alternet.org/amp/theo-von-trump-atlantic-2669016502"
+    ]
+  },
+  {
+    "show": "The Ezra Klein Show",
+    "title": "Is Tim Walz the Midwestern Dad Democrats Need?",
+    "year": 2024,
+    "genre": "News",
+    "why": "Released as Walz joined the Democratic ticket, it was one of Apple's most shared US episodes of 2024.",
+    "sources": [
+      "https://appleinsider.com/articles/24/11/19/top-apple-podcast-charts-for-2024-show-what-everyones-been-listening-to",
+      "https://thetvdb.com/series/the-ezra-klein-show-podcast/seasons/official/2024"
+    ]
+  },
+  {
+    "show": "Call Her Daddy",
+    "title": "Vice President Kamala Harris",
+    "year": 2024,
+    "genre": "Interview",
+    "why": "Harris's appearance on a show for young women came weeks before the election, drew national coverage, and ranked among Apple's most shared episodes of 2024.",
+    "sources": [
+      "https://appleinsider.com/articles/24/11/19/top-apple-podcast-charts-for-2024-show-what-everyones-been-listening-to",
+      "https://www.pbs.org/newshour/amp/politics/harris-appears-on-call-her-daddy-podcast-as-democratic-nominee-steps-up-interviews-this-week",
+      "https://www.boston.com/news/politics/2024/10/06/kamala-harris-call-her-daddy-podcast/"
+    ]
+  },
+  {
+    "show": "The Joe Rogan Experience",
+    "title": "#2219 - Donald Trump",
+    "year": 2024,
+    "genre": "News",
+    "why": "Trump's three-hour visit days before the election drew more than 26 million YouTube views in its first day, the show's most viral episode, and was widely seen as a turning point in podcast politics.",
+    "sources": [
+      "https://thetvdb.com/series/joe-rogan-experience/episodes/10763167",
+      "https://www.insideradio.com/free/donald-trump-s-joe-rogan-experience-appearance-is-most-viral-episode-ever/article_ba39e108-94fb-11ef-8642-232b18e836dd.html",
+      "https://appleinsider.com/articles/24/11/19/top-apple-podcast-charts-for-2024-show-what-everyones-been-listening-to",
+      "https://en.wikipedia.org/wiki/The_Joe_Rogan_Experience"
+    ]
+  },
+  {
+    "show": "The Weekly Show with Jon Stewart",
+    "title": "Trump Won. What Now? with Heather Cox Richardson",
+    "year": 2024,
+    "genre": "News",
+    "why": "Jon Stewart's election post-mortem with the historian became a shared touchstone for dismayed listeners and was among Apple's most shared US episodes of 2025.",
+    "sources": [
+      "https://www.mactrast.com/2025/11/apple-podcasts-announces-most-popular-shows-and-trends-for-2025/"
+    ]
+  },
+  {
+    "show": "The Telepathy Tapes",
+    "title": "Ep 1: Unveiling the Hidden World of Telepathic Communication in a Silenced Community",
+    "year": 2024,
+    "genre": "Narrative",
+    "why": "This debut claiming telepathy among non-speaking autistic people went viral in early 2025, outranking Rogan on the charts and becoming one of Apple's most shared episodes of the year amid skeptical pushback.",
+    "sources": [
+      "https://podscripts.co/podcasts/the-telepathy-tapes/ep-1-unveiling-the-hidden-world-of-telepathic-communication-in-a-silenced-community",
+      "https://www.mactrast.com/2025/11/apple-podcasts-announces-most-popular-shows-and-trends-for-2025/",
+      "https://ppc.land/apple-unveils-most-popular-podcasts-with-2025-year-end-charts/"
+    ]
+  },
+  {
+    "show": "Dodger Blue Dream",
+    "title": "Shohei's Breath",
+    "year": 2024,
+    "genre": "Sports",
+    "why": "A listener's question about whether Shohei Ohtani holds his breath when he swings became a 16-minute gem that critics singled out as an episode of the year.",
+    "sources": [
+      "https://podcastthenewsletter.substack.com/p/fantastic-2024-shows-that-had-one"
+    ]
+  },
+  {
+    "show": "Honestly with Bari Weiss",
+    "title": "Why the Kids Aren't Alright",
+    "year": 2024,
+    "genre": "Culture",
+    "why": "Released as Jonathan Haidt's 'The Anxious Generation' set off a fight over phones and childhood, it ranked among Apple's most shared US episodes of 2024.",
+    "sources": [
+      "https://appleinsider.com/articles/24/11/19/top-apple-podcast-charts-for-2024-show-what-everyones-been-listening-to"
+    ]
+  },
+  {
+    "show": "We Can Do Hard Things",
+    "title": "263. Healing from Emotionally Immature Parents with Lindsay C. Gibson",
+    "year": 2024,
+    "genre": "Culture",
+    "why": "Glennon Doyle's talk with the author of a cult-favorite psychology book struck a chord and was one of the most shared Apple Podcasts episodes of 2024.",
+    "sources": [
+      "https://appleinsider.com/articles/24/11/19/top-apple-podcast-charts-for-2024-show-what-everyones-been-listening-to"
+    ]
+  },
+  {
+    "show": "The Joe Rogan Experience",
+    "title": "#2255 - Mark Zuckerberg",
+    "year": 2025,
+    "genre": "Tech",
+    "why": "Days after Meta ended fact-checking, Zuckerberg's complaints about government pressure and his call for more 'masculine energy' in companies dominated tech and political coverage.",
+    "sources": [
+      "https://thetvdb.com/series/joe-rogan-experience/seasons/official/2025",
+      "https://www.pajiba.com/news/takeaways-from-mark-zuckerbergs-interview-with-joe-rogan.php",
+      "https://zuckerbergfiles.org/2025/01/12/zuckerberg-announces-end-of-fact-checking-program/"
+    ]
+  },
+  {
+    "show": "The Ezra Klein Show",
+    "title": "Don't Believe Him",
+    "year": 2025,
+    "genre": "News",
+    "why": "A short monologue urging listeners not to mistake Trump's early flood of actions for strength struck a nerve and was among Apple's most shared US episodes of 2025.",
+    "sources": [
+      "https://www.mactrast.com/2025/11/apple-podcasts-announces-most-popular-shows-and-trends-for-2025/",
+      "https://thetvdb.com/series/the-ezra-klein-show-podcast/seasons/official/2025"
+    ]
+  },
+  {
+    "show": "This Is Gavin Newsom",
+    "title": "And, This Is Charlie Kirk",
+    "year": 2025,
+    "genre": "News",
+    "why": "Newsom opened his podcast by hosting Charlie Kirk and calling trans athletes in women's sports unfair, a break with progressives that made national headlines.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/This_Is_Gavin_Newsom",
+      "https://www.axios.com/2025/03/06/gavin-newsom-charlie-kirk-podcast-trans-sports?stream=top",
+      "https://sfstandard.com/2025/03/06/gavin-newsom-transgender-athletes-podcast-charlie-kirk/"
+    ]
+  },
+  {
+    "show": "The Joe Rogan Experience",
+    "title": "#2294 – Dr. Suzanne Humphries",
+    "year": 2025,
+    "genre": "Science",
+    "why": "A vaccine-skeptic physician's long conversation with Rogan circulated heavily and ranked among Apple's most shared US episodes of 2025.",
+    "sources": [
+      "https://www.mactrast.com/2025/11/apple-podcasts-announces-most-popular-shows-and-trends-for-2025/"
+    ]
+  },
+  {
+    "show": "Good Hang with Amy Poehler",
+    "title": "Tina Fey Joins the Debut Episode of Good Hang With Amy Poehler",
+    "year": 2025,
+    "genre": "Comedy",
+    "why": "The reunion of Poehler and Fey launched what Apple named the top new show of 2025.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Good_Hang_with_Amy_Poehler",
+      "https://9to5mac.com/2025/11/18/apple-today-shares-the-most-popular-and-best-podcasts-of-2025/"
+    ]
+  },
+  {
+    "show": "Good Hang with Amy Poehler",
+    "title": "Aubrey Plaza and Amy Poehler Reunite",
+    "year": 2025,
+    "genre": "Interview",
+    "why": "Aubrey Plaza's candid conversation about grief after her husband's death was praised by critics as a model of how to talk with a grieving friend.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Good_Hang_with_Amy_Poehler"
+    ]
+  },
+  {
+    "show": "New Heights with Jason and Travis Kelce",
+    "title": "Taylor Swift on Reclaiming Her Masters, Wrapping The Eras Tour, and The Life of a Showgirl",
+    "year": 2025,
+    "genre": "Culture",
+    "why": "Taylor Swift announced a new album on her boyfriend's podcast, setting a Guinness record of 1.3 million concurrent YouTube viewers and racking up hundreds of millions of views across platforms.",
+    "sources": [
+      "https://www.guinnessworldrecords.com/news/2025/8/taylor-swift-earns-podcast-record-with-appearance-on-boyfriend-travis-kelces-new-heights",
+      "https://www.tubefilter.com/2025/08/29/taylor-swift-new-heights-record/",
+      "https://en.wikipedia.org/wiki/New_Heights_(podcast)"
+    ]
+  },
+  {
+    "show": "Pablo Torre Finds Out",
+    "title": "Kawhi Leonard Signed a Secret $28M Deal. Steve Ballmer Funded a Fraud. We Followed the Money.",
+    "year": 2025,
+    "genre": "Sports",
+    "why": "Torre's investigation into a no-show sponsorship deal for Kawhi Leonard set off an NBA investigation and won the 2026 Pulitzer Prize for audio reporting.",
+    "sources": [
+      "https://awards.journalists.org/entries/pablo-torre-finds-out-the-aspiration-files/",
+      "https://baynews9.com/fl/tampa/ap-top-news/2026/05/04/pablo-torres-podcast-wins-pulitzer-prize-for-clippers-report-capping-a-remarkable-rise",
+      "https://awfulannouncing.com/nba/steve-ballmer-ducks-pablo-torre-sportscenter-interview-kawhi-leonard.html"
+    ]
+  },
+  {
+    "show": "Dwarkesh Podcast",
+    "title": "Andrej Karpathy — AGI is still a decade away",
+    "year": 2025,
+    "genre": "Tech",
+    "why": "Karpathy's sober view that AI agents remain years from really working cut against industry hype and set off weeks of debate across the tech world.",
+    "sources": [
+      "https://poderato.com/shows/dwarkesh-podcast/andrej-karpathy-agi-is-still-a-decade-away",
+      "https://www.theneuron.ai/explainer-articles/andrej-karpathy-told-dwarkesh-that-agi-is-still-a-decade-away",
+      "https://thenewstack.io/openai-co-founder-ai-agents-are-still-10-years-away/"
+    ]
+  },
+  {
+    "show": "The Mel Robbins Podcast",
+    "title": "The Body Reset: How Women Should Eat & Exercise for Health, Fat Loss, & Energy",
+    "year": 2025,
+    "genre": "Science",
+    "why": "Apple named it the most shared US episode of 2025, and it also charted in Australia.",
+    "sources": [
+      "https://www.mactrast.com/2025/11/apple-podcasts-announces-most-popular-shows-and-trends-for-2025/",
+      "https://www.apple.com/au/newsroom/2025/11/apple-podcasts-unveils-the-most-popular-shows-and-trends-of-2025",
+      "https://ppc.land/apple-unveils-most-popular-podcasts-with-2025-year-end-charts/"
+    ]
+  },
+  {
+    "show": "The Peter Attia Drive",
+    "title": "Women's sexual health, menopause, and hormone replacement therapy (HRT) | Rachel Rubin, M.D.",
+    "year": 2025,
+    "genre": "Science",
+    "why": "Part of a surge of interest in menopause care, this episode was one of Apple's most shared in both the US and Australia in 2025.",
+    "sources": [
+      "https://www.mactrast.com/2025/11/apple-podcasts-announces-most-popular-shows-and-trends-for-2025/",
+      "https://www.apple.com/au/newsroom/2025/11/apple-podcasts-unveils-the-most-popular-shows-and-trends-of-2025"
+    ]
+  },
+  {
+    "show": "The Shawn Ryan Show",
+    "title": "#163 Gary Brecka – Biohacking Secrets to Longevity, Aging Myths and the Science of Nutrition",
+    "year": 2025,
+    "genre": "Interview",
+    "why": "Gary Brecka's biohacking pitch reached far beyond Shawn Ryan's usual military audience and ranked fourth on Apple's US most-shared episodes chart for 2025.",
+    "sources": [
+      "https://www.mactrast.com/2025/11/apple-podcasts-announces-most-popular-shows-and-trends-for-2025/",
+      "https://ppc.land/apple-unveils-most-popular-podcasts-with-2025-year-end-charts/"
+    ]
+  },
+  {
+    "show": "Las Desencantadas",
+    "title": "No saber decir no",
+    "year": 2026,
+    "genre": "Narrative",
+    "why": "Spotify's editors picked this episode as a standout of their best-podcasts-of-2026-so-far list.",
+    "sources": [
+      "https://newsroom.spotify.com/2026-06-23/best-podcasts-of-the-year-list/"
+    ]
+  },
+  {
+    "show": "This Is Gavin Newsom",
+    "title": "And, This Is Hunter Biden Like You've Never Heard Him Before",
+    "year": 2026,
+    "genre": "News",
+    "why": "Hunter Biden's offer to be Newsom's running mate in 2028 turned a podcast chat into a round of national political headlines.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/This_Is_Gavin_Newsom",
+      "https://www.tmz.com/2026/06/11/hunter-biden-gavin-newsom-vice-president/",
+      "https://www.10news.com/news/fact-or-fiction/fact-or-fiction-hunter-biden-says-hed-consider-running-with-gavin-newsom-in-2028"
+    ]
+  }
+]

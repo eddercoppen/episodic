@@ -1,0 +1,964 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Episodic</title>
+<meta name="theme-color" content="#F2F3F6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11131C" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Episodic">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a broadcast log. Episodes are the rows, the radio dial sits on top, the player is a fixed console at the bottom. */
+:root {
+  --bg: #F2F3F6;
+  --surface: #FFFFFF;
+  --surface-2: #E7E9EF;
+  --ink: #161827;
+  --ink-2: #4D5268;
+  --ink-3: #7C8197;
+  --line: #D9DCE5;
+  --lamp: #D9472B;        /* "on air" lamp: the one accent */
+  --lamp-ink: #FFFFFF;
+  --lamp-soft: #F9DDD5;
+  --ok: #2E7D5B;
+  --console: #161827;
+  --console-ink: #F2F3F6;
+  --shadow: 0 1px 2px rgba(22,24,39,.06), 0 8px 24px rgba(22,24,39,.08);
+  --f-display: "Big Shoulders Display", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --f-body: "Atkinson Hyperlegible", -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --r: 10px;
+  --tabbar-h: 58px;
+  --mini-h: 64px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #11131C; --surface: #1A1D29; --surface-2: #242838; --ink: #ECEDF3; --ink-2: #B3B7C9; --ink-3: #8287A0;
+    --line: #2C3043; --console: #262A3B; --console-ink: #ECEDF3; --lamp: #FF6A47; --lamp-ink: #1A0D08; --lamp-soft: #3A2019; --ok: #5CC596;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 16px/1.45 var(--f-body);
+  -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+img { max-width: 100%; display: block; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid var(--lamp); outline-offset: 2px; border-radius: 6px; }
+a { color: inherit; }
+[hidden] { display: none !important; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+svg.i { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+svg.i.fill { fill: currentColor; stroke: none; }
+
+/* ---------- shell ---------- */
+.top {
+  position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  padding-top: env(safe-area-inset-top, 0px);
+  border-bottom: 1px solid transparent;
+}
+.top.scrolled { border-bottom-color: var(--line); }
+.top-inner {
+  max-width: 760px; margin: 0 auto; display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  padding: 12px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
+}
+.brand { font: 800 30px/1 var(--f-display); letter-spacing: .01em; text-transform: uppercase; margin: 0; }
+.brand .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--lamp); margin-left: 4px; vertical-align: 4px; }
+.top-sub { font: 500 12px/1 var(--f-mono); color: var(--ink-3); letter-spacing: .04em; text-transform: uppercase; }
+main {
+  max-width: 760px; margin: 0 auto;
+  padding: 4px max(16px, env(safe-area-inset-right, 0px)) calc(var(--tabbar-h) + var(--mini-h) + 32px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+}
+.view { display: grid; gap: 22px; }
+
+/* ---------- labels & chips ---------- */
+.eyebrow { font: 500 11.5px/1.2 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin: 0; }
+h2.section { font: 800 24px/1.05 var(--f-display); text-transform: uppercase; letter-spacing: .01em; margin: 0; text-wrap: balance; }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 0 -16px; padding: 2px 16px; scroll-padding: 16px; }
+.chips::-webkit-scrollbar { display: none; }
+.chip {
+  flex: none; padding: 8px 13px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line);
+  font-size: 14px; font-weight: 700; color: var(--ink-2); white-space: nowrap;
+}
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.chip .n { font: 500 11px var(--f-mono); opacity: .7; margin-left: 4px; }
+
+/* ---------- radio dial ---------- */
+.dial {
+  background: var(--console); color: var(--console-ink); border-radius: 16px; padding: 18px 18px 16px; display: grid; gap: 14px;
+  position: relative; overflow: hidden;
+}
+.dial::after { /* tuning scale */
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 10px; opacity: .25;
+  background: repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 12px), repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 60px);
+  background-size: auto 6px, auto 10px; background-repeat: repeat-x; pointer-events: none;
+}
+.dial-row { display: flex; align-items: center; gap: 14px; }
+.lamp { width: 10px; height: 10px; border-radius: 50%; background: color-mix(in srgb, var(--console-ink) 30%, transparent); flex: none; }
+.dial.live .lamp { background: var(--lamp); box-shadow: 0 0 0 4px color-mix(in srgb, var(--lamp) 30%, transparent); }
+.dial-text { min-width: 0; }
+.dial-kicker { font: 500 11px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; opacity: .65; margin: 0 0 6px; }
+.dial-title { font: 800 26px/1 var(--f-display); text-transform: uppercase; margin: 0; letter-spacing: .01em; text-wrap: balance; }
+.dial-sub { font-size: 13.5px; opacity: .75; margin: 3px 0 0; }
+.dial .chips .chip { background: transparent; border-color: color-mix(in srgb, var(--console-ink) 28%, transparent); color: color-mix(in srgb, var(--console-ink) 85%, transparent); }
+.dial .chips .chip[aria-pressed="true"] { background: var(--lamp); border-color: var(--lamp); color: var(--lamp-ink); }
+.btn-air {
+  margin-left: auto; flex: none; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 18px 0 14px; border-radius: 999px;
+  background: var(--lamp); color: var(--lamp-ink); font-weight: 700;
+}
+.btn-air svg { width: 18px; height: 18px; }
+
+/* ---------- year strip ---------- */
+/* every year fits on one line; labels on even years (and the picked one) so they never collide */
+.years { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 3px; height: 72px; }
+.yr { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: 1fr 14px; justify-items: center; gap: 5px; min-width: 0; }
+.yr .bar { width: 100%; max-width: 22px; align-self: end; background: color-mix(in srgb, var(--ink) 16%, transparent); border-radius: 3px 3px 1px 1px; min-height: 4px; }
+.yr:hover .bar { background: color-mix(in srgb, var(--ink) 30%, transparent); }
+.yr .lbl { font: 500 10.5px/14px var(--f-mono); color: var(--ink-3); white-space: nowrap; }
+.yr.odd .lbl { visibility: hidden; }
+.yr.none .bar { min-height: 2px; height: 2px; }
+.yr[aria-pressed="true"] .bar { background: var(--lamp); }
+.yr[aria-pressed="true"] .lbl { visibility: visible; color: var(--ink); }
+.select-sm { width: auto; flex: none; padding: 7px 10px; font-size: 14px; }
+.filters { display: grid; gap: 12px; }
+
+/* ---------- episode rows ---------- */
+.list { display: grid; gap: 12px; }
+.ep { background: var(--surface); border-radius: var(--r); box-shadow: var(--shadow); overflow: hidden; }
+.ep-main { display: grid; grid-template-columns: 64px minmax(0,1fr); gap: 12px; padding: 14px 14px 12px; text-align: left; width: 100%; }
+.art { width: 64px; height: 64px; border-radius: 8px; background: var(--surface-2); object-fit: cover; }
+.ep-meta { font: 500 11.5px/1.3 var(--f-mono); color: var(--ink-3); letter-spacing: .03em; display: flex; flex-wrap: wrap; gap: 0 8px; }
+.ep-meta .yr-tag { color: var(--lamp); font-weight: 500; }
+.ep h3 { font: 700 17px/1.25 var(--f-body); margin: 3px 0 4px; text-wrap: pretty; overflow-wrap: anywhere; }
+.ep .show { font-size: 14px; color: var(--ink-2); margin: 0; }
+.ep .why { font-size: 14px; color: var(--ink-2); margin: 6px 0 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ep.played h3 { color: var(--ink-2); }
+.badge { display: inline-flex; align-items: center; gap: 4px; font: 500 11px/1 var(--f-mono); text-transform: uppercase; letter-spacing: .05em; padding: 3px 6px; border-radius: 4px; background: var(--surface-2); color: var(--ink-2); }
+.badge.ok { color: var(--ok); }
+.progress { height: 3px; background: var(--surface-2); }
+.progress i { display: block; height: 100%; background: var(--lamp); }
+.ep-text { min-width: 0; }
+/* card actions: a row of light pills instead of a full-width button bar */
+.ep-actions { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 14px 14px; }
+.act {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 14px 0 11px; border-radius: 999px;
+  font-size: 14px; font-weight: 700; color: var(--ink-2); background: var(--surface-2);
+}
+.act.play { background: var(--ink); color: var(--bg); }
+.act.play.on { background: var(--lamp); color: var(--lamp-ink); }
+.act.on:not(.play) { color: var(--lamp); background: var(--lamp-soft); }
+.act:disabled { opacity: .45; cursor: default; }
+.act svg { width: 16px; height: 16px; }
+.unavail { font-size: 13px; color: var(--ink-3); padding: 10px 14px 14px; display: flex; justify-content: space-between; gap: 10px; align-items: center; }
+.unavail a { font-weight: 700; color: var(--ink-2); white-space: nowrap; }
+
+.more { justify-self: center; padding: 10px 18px; border-radius: 999px; border: 1px solid var(--line); font-weight: 700; color: var(--ink-2); background: var(--surface); }
+.hidden-note { justify-self: center; text-align: center; display: grid; justify-items: center; gap: 8px; }
+
+/* ---------- library ---------- */
+.seg { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--surface-2); border-radius: 12px; padding: 4px; gap: 4px; }
+.seg button { padding: 9px 4px; border-radius: 9px; font-weight: 700; font-size: 14px; color: var(--ink-2); display: grid; gap: 1px; justify-items: center; }
+.seg button .n { font: 500 11px var(--f-mono); color: var(--ink-3); }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
+.explain { margin: 0; font-size: 14px; color: var(--ink-2); max-width: 60ch; }
+.empty { background: var(--surface); border: 1px dashed var(--line); border-radius: var(--r); padding: 22px 18px; color: var(--ink-2); font-size: 15px; display: grid; gap: 6px; }
+.empty strong { color: var(--ink); }
+.row { background: var(--surface); border-radius: var(--r); box-shadow: var(--shadow); display: grid; grid-template-columns: 48px minmax(0,1fr) auto; gap: 12px; align-items: center; padding: 10px 10px 10px 12px; }
+.row .art { width: 48px; height: 48px; }
+.row-text { min-width: 0; text-align: left; }
+.row-text b { font-size: 15px; line-height: 1.25; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.row-text span { display: block; margin-top: 2px; font-size: 13px; color: var(--ink-3); }
+.show-group { display: grid; gap: 8px; }
+.show-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.show-head > div { display: flex; gap: 10px; align-items: center; min-width: 0; }
+.show-head .art { width: 36px; height: 36px; border-radius: 6px; }
+.show-head b { font-size: 17px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.row-btns { display: flex; gap: 2px; }
+.row-tools { grid-column: 1 / -1; display: flex; align-items: center; justify-content: flex-end; gap: 2px; border-top: 1px solid var(--line); margin: 0 -10px -10px -12px; padding: 2px 6px; }
+.row-tools .num { margin-right: auto; padding-left: 8px; width: auto; }
+.icon-btn { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 10px; color: var(--ink-2); }
+.icon-btn:active { background: var(--surface-2); }
+.icon-btn:disabled { opacity: .3; }
+.num { font: 500 12px var(--f-mono); color: var(--ink-3); width: 1.6em; text-align: right; }
+.settings { display: grid; gap: 12px; background: var(--surface); border-radius: var(--r); padding: 16px; box-shadow: var(--shadow); }
+.settings label { font-weight: 700; font-size: 15px; display: grid; gap: 6px; }
+details.settings { padding: 0; gap: 0; }
+details.settings > summary { list-style: none; display: flex; align-items: center; gap: 10px; padding: 14px 16px; min-height: 52px; font-weight: 700; cursor: pointer; }
+details.settings > summary::-webkit-details-marker { display: none; }
+details.settings > summary .chev { margin-left: auto; color: var(--ink-3); transition: transform .2s; }
+details.settings[open] > summary .chev { transform: rotate(180deg); }
+.settings-body { display: grid; gap: 16px; padding: 4px 16px 16px; border-top: 1px solid var(--line); padding-top: 16px; }
+.hint { font-weight: 400; font-size: 13px; color: var(--ink-3); margin: 0; }
+.toggle { display: flex !important; align-items: center; justify-content: space-between; gap: 12px; }
+.toggle input { width: 22px; height: 22px; accent-color: var(--lamp); }
+input[type=text], input[type=password], textarea, select {
+  font: 15px var(--f-body); color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; width: 100%;
+}
+textarea { font: 12px/1.4 var(--f-mono); min-height: 120px; }
+.btn { text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 16px; border-radius: 10px; font-weight: 700; background: var(--surface-2); color: var(--ink); }
+.btn.primary { background: var(--lamp); color: var(--lamp-ink); }
+.btn.sm { padding: 7px 12px; font-size: 13px; }
+.btn.ghost { background: none; color: var(--ink-2); }
+.btn svg { width: 18px; height: 18px; }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn-row .btn { white-space: nowrap; }
+
+/* ---------- radio view ---------- */
+.onair { background: var(--surface); border-radius: 16px; box-shadow: var(--shadow); padding: 18px; display: grid; gap: 14px; }
+.onair-head { display: flex; align-items: center; gap: 10px; }
+.onair-head .lamp { background: var(--surface-2); }
+.onair.live .onair-head .lamp { background: var(--lamp); box-shadow: 0 0 0 4px var(--lamp-soft); }
+.now-head { display: grid; grid-template-columns: 72px minmax(0,1fr); gap: 14px; align-items: center; }
+.now-head .art { width: 72px; height: 72px; border-radius: 10px; }
+.now-head h2 { font: 700 18px/1.25 var(--f-body); margin: 4px 0 0; text-wrap: balance; overflow-wrap: anywhere; }
+.dj-line { font: italic 400 16px/1.45 var(--f-body); color: var(--ink-2); margin: 0; background: var(--bg); border-radius: 12px; padding: 12px 14px; }
+.dj-line::before { content: "DJ"; display: block; font: normal 500 10.5px/1 var(--f-mono); letter-spacing: .08em; color: var(--lamp); margin-bottom: 6px; }
+.coming { display: grid; gap: 8px; }
+.coming ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.coming li { font-size: 14px; color: var(--ink-2); }
+.coming li b { color: var(--ink); }
+.stations { display: grid; gap: 10px; }
+.ask h2.section { font-size: 20px; }
+.ask-head svg { color: var(--lamp); }
+.station-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.station { background: var(--surface); border-radius: var(--r); box-shadow: var(--shadow); padding: 14px; text-align: left; display: grid; gap: 4px; align-content: start; border: 2px solid transparent; }
+.station b { font: 800 19px/1.05 var(--f-display); text-transform: uppercase; letter-spacing: .01em; }
+.station span { font-size: 13px; color: var(--ink-3); }
+.station .freq { font: 500 11px var(--f-mono); color: var(--lamp); letter-spacing: .06em; }
+.station[aria-pressed="true"] { border-color: var(--lamp); }
+.ask { display: grid; gap: 10px; background: var(--surface); border-radius: var(--r); padding: 16px; box-shadow: var(--shadow); }
+.ask-row { display: flex; gap: 8px; }
+.ask-row input { flex: 1; min-width: 0; }
+.status { font-size: 14px; color: var(--ink-2); margin: 0; }
+.status.err { color: var(--lamp); }
+
+/* ---------- mini player + tab bar ---------- */
+.dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; pointer-events: none; }
+.mini {
+  pointer-events: auto; max-width: 760px; margin: 0 auto 6px; width: calc(100% - 16px - max(0px, env(safe-area-inset-left, 0px)) - max(0px, env(safe-area-inset-right, 0px)));
+  background: var(--console); color: var(--console-ink); border-radius: 14px; box-shadow: 0 10px 30px rgba(0,0,0,.25);
+  display: grid; grid-template-columns: 44px minmax(0,1fr) auto; gap: 10px; align-items: center; padding: 8px 8px 8px 10px; height: var(--mini-h); position: relative; overflow: hidden;
+}
+.mini .art { width: 44px; height: 44px; border-radius: 6px; }
+.mini-text { min-width: 0; text-align: left; }
+.mini-text b { display: block; font-size: 14.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mini-text span { display: block; font: 500 11px/1.3 var(--f-mono); opacity: .7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: .03em; }
+.mini .icon-btn { color: var(--console-ink); width: 44px; height: 44px; }
+.mini .icon-btn svg { width: 24px; height: 24px; }
+.mini-prog { position: absolute; left: 0; bottom: 0; height: 2px; background: var(--lamp); width: 0; }
+.tabs {
+  pointer-events: auto; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid var(--line); display: grid; grid-template-columns: repeat(3, 1fr);
+  padding: 0 max(8px, env(safe-area-inset-right, 0px)) env(safe-area-inset-bottom, 0px) max(8px, env(safe-area-inset-left, 0px));
+}
+.tabs button { height: var(--tabbar-h); display: grid; justify-items: center; align-content: center; gap: 3px; font-size: 12px; font-weight: 700; color: var(--ink-3); }
+.tabs button svg { width: 22px; height: 22px; }
+.tabs button[aria-current="page"] { color: var(--ink); }
+.tabs button[aria-current="page"] svg { color: var(--lamp); }
+
+/* ---------- sheets ---------- */
+.scrim { position: fixed; inset: 0; background: rgba(10,11,18,.45); z-index: 40; opacity: 0; transition: opacity .2s; }
+.scrim.open { opacity: 1; }
+.sheet {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 41; max-height: 92%; overflow-y: auto; overscroll-behavior: contain;
+  background: var(--bg); border-radius: 18px 18px 0 0; transform: translateY(100%); transition: transform .26s cubic-bezier(.2,.8,.2,1);
+  padding: 10px max(18px, env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px));
+}
+.sheet.open { transform: none; }
+.sheet-inner { max-width: 620px; margin: 0 auto; display: grid; gap: 16px; }
+/* sheet header: grab handle centered, close button on the right, stays put while the sheet scrolls */
+.sheet-bar {
+  position: sticky; top: -10px; z-index: 2; display: grid; grid-template-columns: 40px 1fr 40px; align-items: center;
+  margin: -10px -8px 0; padding: 8px 0 4px; background: var(--bg);
+}
+.grab { grid-column: 2; justify-self: center; width: 40px; height: 5px; border-radius: 3px; background: var(--line); }
+.sheet-close { grid-column: 3; }
+.detail-actions { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 8px; }
+.detail-actions .act { justify-content: center; min-height: 46px; padding: 0 10px; }
+.detail-section { display: grid; gap: 8px; }
+.sources li a { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; text-decoration: none; font-weight: 700; }
+.sources li a svg { width: 14px; height: 14px; color: var(--ink-3); }
+.sources li a:hover { text-decoration: underline; }
+.detail-head { display: grid; grid-template-columns: 96px minmax(0,1fr); gap: 14px; align-items: end; }
+.detail-head .art { width: 96px; height: 96px; border-radius: 10px; }
+.detail-head h2 { font: 700 21px/1.2 var(--f-body); margin: 4px 0 2px; text-wrap: balance; overflow-wrap: anywhere; }
+.detail-show { margin: 0; color: var(--ink-2); }
+.detail-why { font-size: 16px; margin: 0; }
+.facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.fact { background: var(--surface); border-radius: 8px; padding: 10px; }
+.fact span { display: block; }
+.fact .k { font: 500 10.5px var(--f-mono); color: var(--ink-3); text-transform: uppercase; letter-spacing: .06em; }
+.fact .v { font: 700 15px var(--f-body); font-variant-numeric: tabular-nums; }
+.sources { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; font-size: 14px; }
+.sources a { color: var(--ink-2); }
+
+/* full player */
+.player { display: grid; gap: 18px; justify-items: center; text-align: center; }
+.player .art.big { width: min(280px, 70vw); height: min(280px, 70vw); border-radius: 14px; box-shadow: var(--shadow); }
+.player h2 { font: 700 20px/1.25 var(--f-body); margin: 0; text-wrap: balance; }
+.player .p-show { margin: 2px 0 0; color: var(--ink-2); font-size: 15px; }
+.p-station { font: 500 11.5px var(--f-mono); color: var(--lamp); letter-spacing: .06em; text-transform: uppercase; }
+.scrub { width: 100%; display: grid; gap: 4px; }
+.scrub input { width: 100%; accent-color: var(--lamp); }
+.times { display: flex; justify-content: space-between; font: 500 12px var(--f-mono); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.transport { display: flex; align-items: center; justify-content: center; gap: 18px; }
+.transport .icon-btn { width: 52px; height: 52px; color: var(--ink); }
+.transport .icon-btn svg { width: 30px; height: 30px; }
+.big-play { width: 72px; height: 72px; border-radius: 50%; background: var(--ink); color: var(--bg); display: grid; place-items: center; }
+.big-play svg { width: 32px; height: 32px; }
+.skip-lbl { position: relative; }
+.skip-lbl small { position: absolute; font: 500 10px var(--f-mono); bottom: 6px; left: 0; right: 0; }
+.p-extra { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(var(--tabbar-h) + var(--mini-h) + 22px + env(safe-area-inset-bottom, 0px)); z-index: 50; background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 999px; font-size: 14px; font-weight: 700; box-shadow: var(--shadow); opacity: 0; transition: opacity .2s; pointer-events: none; max-width: calc(100% - 32px); text-align: center; }
+.toast.show { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) { .sheet, .scrim, .toast { transition: none; } }
+@media (min-width: 640px) {
+  .ep-main { grid-template-columns: 84px minmax(0,1fr); }
+  .ep .art { width: 84px; height: 84px; }
+  .ep .why { -webkit-line-clamp: 3; }
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4.5" height="16" rx="1.2"/><rect x="13.5" y="4" width="4.5" height="16" rx="1.2"/></symbol>
+  <symbol id="i-queue" viewBox="0 0 24 24"><path d="M4 6h12M4 12h12M4 18h7M18 15v6M15 18h6"/></symbol>
+  <symbol id="i-queued" viewBox="0 0 24 24"><path d="M4 6h12M4 12h12M4 18h7M15 18l2 2 4-4"/></symbol>
+  <symbol id="i-save" viewBox="0 0 24 24"><path d="M6 3.5h12a1 1 0 0 1 1 1V21l-7-4.5L5 21V4.5a1 1 0 0 1 1-1z"/></symbol>
+  <symbol id="i-hits" viewBox="0 0 24 24"><path d="M4 20V10M9 20V4M14 20v-7M19 20V8"/></symbol>
+  <symbol id="i-radio" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M7 8l9-5"/><circle cx="15.5" cy="14" r="2.5"/><path d="M6.5 12h3M6.5 16h3"/></symbol>
+  <symbol id="i-lib" viewBox="0 0 24 24"><path d="M5 4v16M10 4v16M15 4.5l4.5 15"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v4.5h4.5"/></symbol>
+  <symbol id="i-fwd" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v4.5h-4.5"/></symbol>
+  <symbol id="i-next" viewBox="0 0 24 24"><path d="M5 5l10 7-10 7zM19 5v14"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
+  <symbol id="i-follow" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/></symbol>
+</svg>
+
+<header class="top" id="top">
+  <div class="top-inner">
+    <h1 class="brand">Episodic<span class="dot" aria-hidden="true"></span></h1>
+    <span class="top-sub" id="topSub"></span>
+  </div>
+</header>
+
+<main id="main"></main>
+
+<div class="dock">
+  <div class="mini" id="mini" hidden>
+    <img class="art" id="miniArt" alt="">
+    <button class="mini-text" id="miniOpen" aria-label="Open player"><b id="miniTitle"></b><span id="miniSub"></span></button>
+    <button class="icon-btn" id="miniToggle" aria-label="Play"><svg class="i fill"><use href="#i-play"/></svg></button>
+    <div class="mini-prog" id="miniProg"></div>
+  </div>
+  <nav class="tabs" aria-label="Sections">
+    <button data-tab="hits" aria-current="page"><svg class="i"><use href="#i-hits"/></svg>Hits</button>
+    <button data-tab="radio"><svg class="i"><use href="#i-radio"/></svg>Radio</button>
+    <button data-tab="library"><svg class="i"><use href="#i-lib"/></svg>Library</button>
+  </nav>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Details" hidden><div class="sheet-inner" id="sheetInner"></div></section>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<audio id="au" preload="metadata"></audio>
+
+<script>
+"use strict";
+/* ================= data & storage ================= */
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const icon = (id, cls = "") => `<svg class="i ${cls}"><use href="#i-${id}"/></svg>`;
+
+let CAT = [], BY = {}, STATIONS = [], META = {};
+const LKEY = "episodic.lib.v1";
+const lib = Object.assign({ saved: [], queue: [], follows: [], history: [], progress: {}, settings: { dj: true, speed: 1, apiKey: "", voice: "" }, custom: [] }, load());
+function load() { try { return JSON.parse(localStorage.getItem(LKEY)) || {}; } catch { return {}; } }
+let saveT;
+function persist() { clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(LKEY, JSON.stringify(lib)); } catch {} }, 150); }
+
+const ui = { tab: "hits", genre: "All", year: null, sort: "mixed", shown: 30, libTab: "queue", station: "all", unavail: false, settingsOpen: false };
+
+/* ================= helpers ================= */
+function fmtDur(s) { if (!s) return ""; const h = Math.floor(s / 3600), m = Math.round((s % 3600) / 60); return h ? `${h}h ${String(m).padStart(2, "0")}m` : `${m} min`; }
+function fmtClock(s) { s = Math.max(0, Math.floor(s || 0)); const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60; return (h ? h + ":" + String(m).padStart(2, "0") : m) + ":" + String(x).padStart(2, "0"); }
+function fmtDate(d) { const t = Date.parse(d); return isNaN(t) ? "" : new Date(t).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" }); }
+function hostOf(u) { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return u; } }
+function seeded(seed) { let s = seed >>> 0; return () => ((s = Math.imul(s ^ (s >>> 15), 2246822507) ^ Math.imul(s ^ (s >>> 13), 3266489909)) >>> 0) / 4294967296; }
+function shuffle(arr, rnd = Math.random) { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+const playable = e => !!e.audioUrl;
+const isSaved = id => lib.saved.includes(id);
+const isQueued = id => lib.queue.includes(id);
+const isFollowed = show => lib.follows.includes(show);
+const prog = id => lib.progress[id] || {};
+let toastT;
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 1800); }
+
+/* ================= library actions ================= */
+function toggleSave(id) { if (isSaved(id)) { lib.saved = lib.saved.filter(x => x !== id); toast("Removed from Saved"); } else { lib.saved.unshift(id); toast("Saved"); } persist(); refresh(); }
+function toggleQueue(id) { if (isQueued(id)) { lib.queue = lib.queue.filter(x => x !== id); toast("Removed from Up Next"); } else { lib.queue.push(id); toast(`Up Next · ${lib.queue.length} in line`); } persist(); refresh(); }
+function toggleFollow(show) { if (isFollowed(show)) { lib.follows = lib.follows.filter(x => x !== show); toast(`Unfollowed ${show}`); } else { lib.follows.unshift(show); toast(`Following ${show}`); } persist(); refresh(); }
+
+/* ================= player ================= */
+const au = $("#au");
+const P = { id: null, mode: "single", station: null, radioList: [], radioPos: 0, djText: "", speaking: false };
+
+function playEpisode(id, opts = {}) {
+  const e = BY[id]; if (!e || !playable(e)) return;
+  P.mode = opts.mode || "single";
+  if (P.mode !== "radio") { P.djText = ""; }
+  if (P.mode === "queue") lib.queue = lib.queue.filter(x => x !== id);
+  P.id = id;
+  au.src = e.audioUrl;
+  const p = prog(id);
+  const startAt = p.done ? 0 : (p.t || 0);
+  au.playbackRate = lib.settings.speed || 1;
+  const go = () => { if (startAt > 5) { try { au.currentTime = startAt; } catch {} } };
+  au.addEventListener("loadedmetadata", go, { once: true });
+  au.play().catch(err => { if (err.name !== "AbortError") toast("Couldn't start playback. Tap play to try again."); });
+  lib.history = [{ id, at: Date.now() }, ...lib.history.filter(h => h.id !== id)].slice(0, 200);
+  persist(); setMediaSession(e); refresh(); renderMini();
+}
+function togglePlay() { if (!P.id) return; if (au.paused) { au.play().catch(() => {}); } else { au.pause(); } }
+function seekBy(s) { if (!P.id) return; try { au.currentTime = Math.max(0, Math.min((au.duration || 1e9) - 1, au.currentTime + s)); } catch {} }
+function playNext() {
+  stopSpeaking();
+  if (P.mode === "radio") return radioAdvance(1);
+  if (lib.queue.length) return playEpisode(lib.queue[0], { mode: "queue" });
+  au.pause(); toast("Up Next is empty");
+}
+let lastSaved = 0;
+au.addEventListener("timeupdate", () => {
+  if (!P.id) return;
+  const d = au.duration || 0, t = au.currentTime;
+  $("#miniProg").style.width = d ? (t / d * 100) + "%" : "0";
+  if (sheetKind === "player") updateScrub();
+  if (Date.now() - lastSaved > 4000) {
+    lastSaved = Date.now();
+    const p = lib.progress[P.id] || {};
+    lib.progress[P.id] = { t: Math.floor(t), d: Math.floor(d) || p.d, done: p.done || (d && t / d > 0.95) };
+    persist();
+  }
+});
+au.addEventListener("ended", () => {
+  if (P.id) { lib.progress[P.id] = { t: 0, d: Math.floor(au.duration || 0), done: true }; persist(); }
+  playNext();
+});
+["play", "pause"].forEach(ev => au.addEventListener(ev, () => { renderMini(); if (sheetKind === "player") renderPlayerControls(); markLive(); }));
+au.addEventListener("error", () => {
+  if (!P.id || !au.getAttribute("src")) return;
+  const auto = P.mode === "radio" || (P.mode === "queue" && lib.queue.length);
+  toast(auto ? "That episode's audio didn't load, so skipping ahead." : "This episode's audio didn't load. The show may have moved it.");
+  if (auto) setTimeout(playNext, 1500);
+});
+
+function setMediaSession(e) {
+  if (!("mediaSession" in navigator)) return;
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title: e.title, artist: e.show, album: P.mode === "radio" && P.station ? P.station.name : "Episodic",
+    artwork: e.artwork ? [{ src: e.artwork, sizes: "600x600", type: "image/jpeg" }] : []
+  });
+  const ms = navigator.mediaSession;
+  const h = (a, f) => { try { ms.setActionHandler(a, f); } catch {} };
+  h("play", () => au.play()); h("pause", () => au.pause());
+  h("seekbackward", () => seekBy(-15)); h("seekforward", () => seekBy(30));
+  h("nexttrack", (P.mode === "radio" || lib.queue.length) ? playNext : null);
+  h("seekto", d => { try { au.currentTime = d.seekTime; } catch {} });
+}
+
+/* ================= radio ================= */
+function baseStations() {
+  const st = [
+    { key: "all", name: "Greatest Hits", sub: "Every era, all genres", test: () => true },
+    { key: "early", name: "Pioneers", sub: "2004–2013, before the boom", test: e => e.year <= 2013 },
+    { key: "boom", name: "The Boom", sub: "2014–2017, after Serial", test: e => e.year >= 2014 && e.year <= 2017 },
+    { key: "mid", name: "Peak Era", sub: "2018–2021", test: e => e.year >= 2018 && e.year <= 2021 },
+    { key: "now", name: "Lately", sub: "2022 to now", test: e => e.year >= 2022 },
+    { key: "talk", name: "Big Interviews", sub: "Conversations that made news", test: e => e.genre === "Interview" },
+    { key: "story", name: "Stories", sub: "Narrative, history, true crime", test: e => ["Narrative", "History", "True Crime"].includes(e.genre) },
+    { key: "ideas", name: "Ideas", sub: "Science, tech, business", test: e => ["Science", "Tech", "Business"].includes(e.genre) },
+    { key: "laughs", name: "Laughs", sub: "Comedy that broke out", test: e => e.genre === "Comedy" },
+    { key: "short", name: "Quick Hits", sub: "Half an hour or less", test: e => e.durationSec && e.durationSec <= 1860 }
+  ];
+  const themed = (META.stations || []).map(s => ({ key: "t-" + s.key, name: s.name, sub: s.sub, ids: s.ids, intros: s.intros || {}, themed: true }));
+  const custom = (lib.custom || []).map(s => ({ ...s, custom: true }));
+  return [...st, ...themed, ...custom];
+}
+function stationEpisodes(st) {
+  const pool = st.ids ? st.ids.map(id => BY[id]).filter(Boolean) : CAT.filter(st.test);
+  return pool.filter(playable);
+}
+function tune(key, { start = true } = {}) {
+  const st = STATIONS.find(s => s.key === key) || STATIONS[0];
+  ui.station = st.key;
+  let eps = stationEpisodes(st);
+  if (!eps.length) { toast("Nothing playable on this station yet"); return; }
+  if (st.ids) { eps = eps.slice(); }            // curated stations keep their running order
+  else {
+    // unheard first, then played; shuffled inside each group
+    const fresh = shuffle(eps.filter(e => !prog(e.id).done)), heard = shuffle(eps.filter(e => prog(e.id).done));
+    eps = [...fresh, ...heard];
+  }
+  P.station = st; P.radioList = eps.map(e => e.id); P.radioPos = 0;
+  if (start) startRadioItem();
+  refresh();
+}
+function radioAdvance(d) {
+  if (!P.station) return;
+  P.radioPos += d;
+  if (P.radioPos >= P.radioList.length) { P.radioPos = 0; }
+  if (P.radioPos < 0) P.radioPos = 0;
+  startRadioItem();
+}
+function djIntro(e) {
+  const st = P.station || {};
+  if (st.intros && st.intros[e.id]) return st.intros[e.id];
+  if (e.dj) return e.dj;
+  return `From ${e.year}, this is ${e.show}. ${e.why}`;
+}
+function startRadioItem() {
+  const id = P.radioList[P.radioPos]; const e = BY[id]; if (!e) return;
+  P.mode = "radio"; P.djText = djIntro(e);
+  P.id = id; renderMini(); refresh();
+  // with the screen locked, phones won't speak and may refuse to restart audio after a pause, so skip the intro there
+  if (lib.settings.dj && "speechSynthesis" in window && !document.hidden) {
+    au.pause();
+    speak(P.djText).then(() => { if (P.id === id && P.mode === "radio") playEpisode(id, { mode: "radio" }); });
+  } else playEpisode(id, { mode: "radio" });
+}
+function pickVoice() {
+  const vs = speechSynthesis.getVoices(); if (!vs.length) return null;
+  if (lib.settings.voice) { const v = vs.find(v => v.name === lib.settings.voice); if (v) return v; }
+  const en = vs.filter(v => /^en(-|_)/i.test(v.lang));
+  const pref = ["Samantha", "Daniel", "Karen", "Moira", "Google US English", "Alex"];
+  for (const n of pref) { const v = en.find(v => v.name.includes(n)); if (v) return v; }
+  return en.find(v => v.localService) || en[0] || vs[0];
+}
+function speak(text) {
+  return new Promise(res => {
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      const v = pickVoice(); if (v) u.voice = v;
+      u.rate = 1.02; u.pitch = 1;
+      let done = false; const fin = () => { if (!done) { done = true; P.speaking = false; markLive(); res(); } };
+      u.onend = fin; u.onerror = fin;
+      P.speaking = true; markLive();
+      speechSynthesis.speak(u);
+      setTimeout(fin, Math.max(8000, text.length * 110)); // safety net if the voice never reports "end"
+    } catch { res(); }
+  });
+}
+function stopSpeaking() { try { speechSynthesis.cancel(); } catch {} P.speaking = false; }
+
+/* ---- AI station (optional, uses your own Anthropic API key) ---- */
+async function makeStation(prompt) {
+  const key = lib.settings.apiKey;
+  const list = CAT.filter(playable).map(e => `${e.id}|${e.year}|${e.genre}|${e.show}|${e.title}|${e.why}`).join("\n");
+  const body = {
+    model: "claude-haiku-5-5", max_tokens: 2500,
+    messages: [{ role: "user", content:
+`You program a radio station made of podcast episodes. The listener asked for: "${prompt}"
+
+Pick 6 to 10 episodes from this catalog that best fit the request, in a running order that flows well. For each, write a DJ intro of one or two spoken sentences (under 40 words) that sets up why this episode is worth hearing. Speak naturally, no hype words, no emoji. Also name the station (2-4 words).
+
+Catalog, one per line: id|year|genre|show|title|why
+${list}
+
+Reply with only JSON: {"name": "...", "sub": "one short line", "picks": [{"id": "e012", "intro": "..."}]}` }]
+  };
+  const r = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) { const t = await r.text(); throw new Error(r.status === 401 ? "The API key was rejected. Check it in Library → Settings." : `The request failed (${r.status}). ${t.slice(0, 140)}`); }
+  const data = await r.json();
+  const text = (data.content || []).map(c => c.text || "").join("");
+  const m = text.match(/\{[\s\S]*\}/); if (!m) throw new Error("Claude's reply wasn't in the expected format. Try again.");
+  const j = JSON.parse(m[0]);
+  const picks = (j.picks || []).filter(p => BY[p.id] && playable(BY[p.id]));
+  if (!picks.length) throw new Error("No matching episodes came back. Try a broader request.");
+  const st = { key: "c-" + Date.now().toString(36), name: String(j.name || prompt).slice(0, 40), sub: String(j.sub || `“${prompt}”`).slice(0, 80), ids: picks.map(p => p.id), intros: Object.fromEntries(picks.map(p => [p.id, String(p.intro || "")])) };
+  lib.custom = [st, ...(lib.custom || [])].slice(0, 12); persist();
+  STATIONS = baseStations();
+  return st;
+}
+
+/* ================= rendering ================= */
+function epCard(e) {
+  const p = prog(e.id), pct = p.d ? Math.min(100, p.t / p.d * 100) : 0;
+  const can = playable(e);
+  return `<article class="ep${p.done ? " played" : ""}" data-id="${e.id}">
+    <button class="ep-main" data-act="open" aria-label="Details for ${esc(e.title)}">
+      <img class="art" src="${esc(e.artwork || "")}" alt="" loading="lazy">
+      <div class="ep-text">
+        <div class="ep-meta"><span class="yr-tag">${e.year}</span><span>${esc(e.genre)}</span>${e.durationSec ? `<span>${fmtDur(e.durationSec)}</span>` : ""}${p.done ? `<span class="badge ok">${icon("check")} Played</span>` : pct > 2 ? `<span class="badge">${Math.round(pct)}% in</span>` : ""}</div>
+        <h3>${esc(e.title)}</h3>
+        <p class="show">${esc(e.show)}</p>
+        <p class="why">${esc(e.why)}</p>
+      </div>
+    </button>
+    ${pct > 2 && !p.done ? `<div class="progress"><i style="width:${pct}%"></i></div>` : ""}
+    ${can ? `<div class="ep-actions">${actionButtons(e, p, pct)}</div>`
+      : `<div class="unavail"><span>Not in the show's public feed anymore.</span>${e.appleShowUrl ? `<a href="${esc(e.appleShowUrl)}" target="_blank" rel="noopener">Find it on Apple</a>` : ""}</div>`}
+  </article>`;
+}
+// Play / Up Next / Save, shared by the episode card and the detail sheet
+function actionButtons(e, p = prog(e.id), pct = p.d ? p.t / p.d * 100 : 0) {
+  const playing = P.id === e.id && !au.paused, q = isQueued(e.id), s = isSaved(e.id);
+  return `<button class="act play${playing ? " on" : ""}" data-act="play">${icon(playing ? "pause" : "play", "fill")}${playing ? "Playing" : pct > 2 && !p.done ? "Resume" : "Play"}</button>
+    <button class="act${q ? " on" : ""}" data-act="queue" aria-pressed="${q}">${icon(q ? "queued" : "queue")}${q ? "In Up Next" : "Up Next"}</button>
+    <button class="act${s ? " on" : ""}" data-act="save" aria-pressed="${s}">${icon("save", s ? "fill" : "")}${s ? "Saved" : "Save"}</button>`;
+}
+
+function filtered() {
+  let list = CAT.filter(e => (ui.genre === "All" || e.genre === ui.genre) && (!ui.year || e.year === ui.year) && (ui.unavail || playable(e)));
+  if (ui.sort === "newest") list.sort((a, b) => b.year - a.year || (Date.parse(b.pubDate) || 0) - (Date.parse(a.pubDate) || 0));
+  else if (ui.sort === "oldest") list.sort((a, b) => a.year - b.year || (Date.parse(a.pubDate) || 0) - (Date.parse(b.pubDate) || 0));
+  else { const day = Math.floor(Date.now() / 864e5); list = shuffle(list, seeded(day)); list.sort((a, b) => (prog(a.id).done ? 1 : 0) - (prog(b.id).done ? 1 : 0)); }
+  return list;
+}
+
+function renderHits() {
+  const vis = CAT.filter(e => ui.unavail || playable(e));
+  const genres = ["All", ...Object.entries(vis.reduce((m, e) => (m[e.genre] = (m[e.genre] || 0) + 1, m), {})).sort((a, b) => b[1] - a[1]).map(x => x[0])];
+  const years = {}; vis.forEach(e => years[e.year] = (years[e.year] || 0) + 1);
+  const yk = Object.keys(years).map(Number), ys = []; for (let y = Math.min(...yk); y <= Math.max(...yk); y++) ys.push(y); const maxY = Math.max(...Object.values(years));
+  const list = filtered();
+  const hiddenCount = CAT.filter(e => !playable(e) && (ui.genre === "All" || e.genre === ui.genre) && (!ui.year || e.year === ui.year)).length;
+  const st = STATIONS.find(s => s.key === ui.station) || STATIONS[0];
+  const live = P.mode === "radio" && P.id && !au.paused;
+  return `<section class="view">
+    <div class="dial${live ? " live" : ""}" id="dial">
+      <div class="dial-row">
+        <span class="lamp" aria-hidden="true"></span>
+        <div class="dial-text"><p class="dial-kicker">Radio · ${stationEpisodes(st).length} episodes</p><p class="dial-title">${esc(st.name)}</p><p class="dial-sub">${esc(st.sub)}</p></div>
+        <button class="btn-air" data-act="air">${icon(live ? "pause" : "play", "fill")}${live ? "Pause" : P.mode === "radio" && P.id ? "Resume" : "Tune in"}</button>
+      </div>
+      <div class="chips" role="group" aria-label="Station">${STATIONS.filter(s => !s.custom).map(s => `<button class="chip" data-station="${s.key}" aria-pressed="${s.key === st.key}">${esc(s.name)}</button>`).join("")}</div>
+    </div>
+
+    <div class="filters">
+      <div class="section-head"><h2 class="section">${ui.year ? `Hits of ${ui.year}` : "Episodes that made a splash"}</h2>
+        <select id="sort" class="select-sm" aria-label="Sort">
+          <option value="mixed"${ui.sort === "mixed" ? " selected" : ""}>Today's mix</option>
+          <option value="newest"${ui.sort === "newest" ? " selected" : ""}>Newest first</option>
+          <option value="oldest"${ui.sort === "oldest" ? " selected" : ""}>Oldest first</option>
+        </select></div>
+      <div class="years" role="group" aria-label="Filter by year">
+        ${ys.map(y => years[y] ? `<button class="yr${y % 2 ? " odd" : ""}" data-year="${y}" aria-pressed="${ui.year === y}" aria-label="${y}, ${years[y]} episodes"><span class="bar" style="height:${Math.max(8, years[y] / maxY * 100)}%"></span><span class="lbl">'${String(y).slice(2)}</span></button>`
+          : `<span class="yr none${y % 2 ? " odd" : ""}" aria-hidden="true"><span class="bar"></span><span class="lbl">'${String(y).slice(2)}</span></span>`).join("")}
+      </div>
+      <div class="chips" role="group" aria-label="Filter by genre">${genres.map(g => `<button class="chip" data-genre="${esc(g)}" aria-pressed="${ui.genre === g}">${esc(g)}${g !== "All" ? `<span class="n">${vis.filter(e => e.genre === g).length}</span>` : ""}</button>`).join("")}</div>
+    </div>
+
+    <div class="list">${list.slice(0, ui.shown).map(epCard).join("") || `<div class="empty"><strong>Nothing matches.</strong>Try another year or genre.</div>`}</div>
+    ${list.length > ui.shown ? `<button class="more" data-act="more">Show ${Math.min(30, list.length - ui.shown)} more of ${list.length - ui.shown}</button>` : ""}
+    ${hiddenCount ? `<div class="hidden-note"><p class="explain">${hiddenCount} more hits here are no longer free to stream (paywalled or pulled from their feeds).</p><button class="chip" data-act="unavail">${ui.unavail ? "Hide them" : "Show them anyway"}</button></div>` : ""}
+  </section>`;
+}
+
+function renderRadio() {
+  const st = P.station || STATIONS.find(s => s.key === ui.station) || STATIONS[0];
+  const cur = P.mode === "radio" && P.id ? BY[P.id] : null;
+  const live = cur && (!au.paused || P.speaking);
+  const upnext = P.station && P.mode === "radio" ? P.radioList.slice(P.radioPos + 1, P.radioPos + 4).map(id => BY[id]) : [];
+  const hasKey = !!lib.settings.apiKey;
+  return `<section class="view">
+    <div class="onair${live ? " live" : ""}" id="onair">
+      <div class="onair-head"><span class="lamp" aria-hidden="true"></span><p class="eyebrow">${live ? (P.speaking ? "DJ on the mic" : "On air") : "Off air"} · ${esc(st.name)}</p></div>
+      ${cur ? `
+        <div class="now-head"><img class="art" src="${esc(cur.artwork || "")}" alt="">
+          <div class="ep-text"><p class="eyebrow">${cur.year} · ${esc(cur.show)}</p><h2>${esc(cur.title)}</h2></div></div>
+        ${lib.settings.dj && P.djText ? `<p class="dj-line">${esc(P.djText)}</p>` : ""}
+        <div class="btn-row">
+          <button class="btn primary" data-act="air">${icon(au.paused && !P.speaking ? "play" : "pause", "fill")}${au.paused && !P.speaking ? "Resume" : "Pause"}</button>
+          <button class="btn" data-act="radio-next">${icon("next")}Next episode</button>
+          <button class="btn" data-act="save" data-id="${cur.id}">${icon("save", isSaved(cur.id) ? "fill" : "")}${isSaved(cur.id) ? "Saved" : "Save"}</button>
+        </div>
+        ${upnext.length ? `<div class="coming"><p class="eyebrow">Coming up</p><ol>${upnext.map(e => `<li><b>${esc(e.title)}</b> · ${esc(e.show)}, ${e.year}</li>`).join("")}</ol></div>` : ""}
+      ` : `<p class="status">Pick a station and the DJ will introduce each episode before it plays. Long episodes play in full; skip whenever you like.</p>
+           <div class="btn-row"><button class="btn primary" data-act="air">${icon("play", "fill")}Tune in to ${esc(st.name)}</button></div>`}
+    </div>
+
+    <div class="stations">
+      <h2 class="section">Stations</h2>
+      <div class="station-grid">${STATIONS.map((s, i) => `<button class="station" data-station="${s.key}" aria-pressed="${s.key === st.key}">
+        <span class="freq">${s.custom ? "YOUR MIX" : s.themed ? "CURATED" : (88.1 + i * 2.2).toFixed(1) + " FM"}</span><b>${esc(s.name)}</b><span>${esc(s.sub)} · ${stationEpisodes(s).length}</span></button>`).join("")}</div>
+    </div>
+
+    <div class="ask">
+      <div class="section-head ask-head"><h2 class="section">Make a station</h2>${icon("spark")}</div>
+      <p class="explain">Describe a mood or topic and Claude picks episodes from the catalog and writes the DJ intros. ${hasKey ? "" : "Add an Anthropic API key in Library → Settings to turn this on."}</p>
+      <form class="ask-row" id="askForm"><label class="sr" for="askIn">Station request</label>
+        <input id="askIn" type="text" placeholder="e.g. long drive, scams and con artists" ${hasKey ? "" : "disabled"}>
+        <button class="btn primary" ${hasKey ? "" : "disabled"}>Make it</button></form>
+      <p class="status" id="askStatus" aria-live="polite"></p>
+    </div>
+
+    <div class="settings">
+      <label class="toggle">DJ intros between episodes<input type="checkbox" id="djToggle" ${lib.settings.dj ? "checked" : ""}></label>
+      <p class="hint">Uses your phone's built-in voice. Intros may not play while the screen is locked.</p>
+    </div>
+  </section>`;
+}
+
+function libRow(e, extra = "") {
+  const p = prog(e.id);
+  return `<div class="row" data-id="${e.id}">
+    <img class="art" src="${esc(e.artwork || "")}" alt="" loading="lazy">
+    <button class="row-text" data-act="open"><b>${esc(e.title)}</b><span>${esc(e.show)} · ${e.year}${p.done ? " · played" : p.t > 30 && p.d ? ` · ${fmtClock(p.d - p.t)} left` : e.durationSec ? " · " + fmtDur(e.durationSec) : ""}</span></button>
+    <div class="row-btns">${playable(e) ? `<button class="icon-btn" data-act="play" aria-label="Play">${icon("play", "fill")}</button>` : ""}</div>
+    ${extra ? `<div class="row-tools">${extra}</div>` : ""}
+  </div>`;
+}
+function renderLibrary() {
+  const tabs = [["queue", "Up Next", lib.queue.length], ["saved", "Saved", lib.saved.length], ["shows", "Shows", lib.follows.length], ["history", "History", lib.history.length]];
+  let body = "";
+  if (ui.libTab === "queue") {
+    body = `<p class="explain">Up Next plays in order after whatever is playing now. An episode leaves this list once you start it.</p>` +
+      (lib.queue.length ? `<div class="list">${lib.queue.map((id, i) => BY[id] ? libRow(BY[id], `<span class="num">${i === 0 ? "Plays next" : "#" + (i + 1)}</span><button class="icon-btn" data-act="q-up" aria-label="Move up" ${i ? "" : "disabled"}>${icon("up")}</button><button class="icon-btn" data-act="q-down" aria-label="Move down" ${i < lib.queue.length - 1 ? "" : "disabled"}>${icon("down")}</button><button class="icon-btn" data-act="queue" aria-label="Remove">${icon("x")}</button>`) : "").join("")}</div>
+        <div class="btn-row"><button class="btn primary" data-act="play-queue">${icon("play", "fill")}Play Up Next</button><button class="btn" data-act="clear-queue">Clear</button></div>`
+        : `<div class="empty"><strong>Up Next is empty.</strong>Tap “Up Next” on any episode to line it up.</div>`);
+  } else if (ui.libTab === "saved") {
+    body = `<p class="explain">Saved episodes stay here until you remove them, whether or not you follow the show.</p>` +
+      (lib.saved.length ? `<div class="list">${lib.saved.map(id => BY[id] ? libRow(BY[id], `<button class="btn sm ghost" data-act="save">${icon("x")}Remove</button>`) : "").join("")}</div>`
+        : `<div class="empty"><strong>Nothing saved yet.</strong>Tap “Save” on an episode you want to keep.</div>`);
+  } else if (ui.libTab === "shows") {
+    body = `<p class="explain">Shows you follow. Their standout episodes are listed under each one.</p>` +
+      (lib.follows.length ? lib.follows.map(show => { const eps = CAT.filter(e => e.show === show); const art = eps[0]?.artwork;
+        return `<div class="show-group"><div class="show-head"><div>${art ? `<img class="art" src="${esc(art)}" alt="">` : ""}<b>${esc(show)}</b></div><button class="btn sm" data-act="follow" data-show="${esc(show)}">Unfollow</button></div><div class="list">${eps.map(e => libRow(e)).join("")}</div></div>`; }).join("")
+        : `<div class="empty"><strong>Not following any shows.</strong>Open an episode and tap “Follow show”.</div>`);
+  } else {
+    body = `<p class="explain">Everything you've started, most recent first.</p>` +
+      (lib.history.length ? `<div class="list">${lib.history.slice(0, 60).map(h => BY[h.id] ? libRow(BY[h.id]) : "").join("")}</div>` : `<div class="empty"><strong>No history yet.</strong>Episodes you play show up here.</div>`);
+  }
+  return `<section class="view">
+    <div class="seg" role="group" aria-label="Library section">${tabs.map(([k, l, n]) => `<button data-libtab="${k}" aria-pressed="${ui.libTab === k}">${l}<span class="n">${n}</span></button>`).join("")}</div>
+    ${body}
+    <details class="settings" id="settings"${ui.settingsOpen ? " open" : ""}>
+      <summary>${icon("gear")}Settings${icon("chev", "chev")}</summary>
+      <div class="settings-body">
+      <label>Playback speed<select id="speedSel">${[0.8, 1, 1.1, 1.2, 1.3, 1.5, 1.75, 2].map(s => `<option value="${s}"${(lib.settings.speed || 1) == s ? " selected" : ""}>${s}×</option>`).join("")}</select></label>
+      <label>DJ voice<select id="voiceSel"><option value="">Automatic</option></select><span class="hint">Voices come from your device. Enhanced voices (iPhone Settings → Accessibility → Spoken Content) sound much better.</span></label>
+      <label>Anthropic API key <span class="hint">Optional. Turns on “Make a station”. Stored only on this device.</span><input type="password" id="keyIn" autocomplete="off" placeholder="sk-ant-…" value="${esc(lib.settings.apiKey)}"></label>
+      <label>Back up your library <span class="hint">Copy this to keep your Saved, Up Next and follows, or paste a backup here and tap Restore.</span><textarea id="backup" spellcheck="false"></textarea></label>
+      <div class="btn-row"><button class="btn" data-act="export">Show backup</button><button class="btn" data-act="copy">Copy</button><button class="btn" data-act="import">Restore</button></div>
+      <p class="hint">Catalog: ${CAT.length} episodes, ${CAT.filter(playable).length} playable. Built ${esc(META.built || "")}.</p>
+      </div>
+    </details>
+  </section>`;
+}
+
+function render() {
+  const m = $("#main");
+  m.innerHTML = ui.tab === "hits" ? renderHits() : ui.tab === "radio" ? renderRadio() : renderLibrary();
+  document.querySelectorAll(".tabs button").forEach(b => b.setAttribute("aria-current", b.dataset.tab === ui.tab ? "page" : "false"));
+  $("#topSub").textContent = ui.tab === "hits" ? `${CAT.length} episodes · ${CAT.length ? CAT[0] && Math.min(...CAT.map(e => e.year)) + "–" + Math.max(...CAT.map(e => e.year)) : ""}` : ui.tab === "radio" ? "Greatest hits, on air" : "Your episodes";
+  if (ui.tab === "library") fillVoices();
+}
+function refresh() { const y = window.scrollY; render(); window.scrollTo(0, y); if (sheetKind === "detail" && sheetId) openDetail(sheetId, true); }
+function markLive() { if (ui.tab !== "library" && (P.mode === "radio")) refresh(); }
+function fillVoices() {
+  const sel = $("#voiceSel"); if (!sel || !("speechSynthesis" in window)) return;
+  const vs = speechSynthesis.getVoices().filter(v => /^en/i.test(v.lang));
+  sel.innerHTML = `<option value="">Automatic</option>` + vs.map(v => `<option value="${esc(v.name)}"${lib.settings.voice === v.name ? " selected" : ""}>${esc(v.name)} (${esc(v.lang)})</option>`).join("");
+}
+if ("speechSynthesis" in window) speechSynthesis.onvoiceschanged = () => { if (ui.tab === "library") fillVoices(); };
+
+function renderMini() {
+  const e = BY[P.id]; const mini = $("#mini");
+  if (!e) { mini.hidden = true; return; }
+  mini.hidden = false;
+  $("#miniArt").src = e.artwork || "";
+  $("#miniTitle").textContent = e.title;
+  $("#miniSub").textContent = (P.mode === "radio" && P.station ? `${P.station.name} Radio · ` : "") + e.show;
+  const playing = !au.paused || P.speaking;
+  $("#miniToggle").innerHTML = icon(playing ? "pause" : "play", "fill");
+  $("#miniToggle").setAttribute("aria-label", playing ? "Pause" : "Play");
+}
+
+/* ================= sheets ================= */
+let sheetKind = null, sheetId = null;
+function openSheet(html, kind, id) {
+  sheetKind = kind; sheetId = id || null;
+  $("#sheetInner").innerHTML = `<div class="sheet-bar"><div class="grab" aria-hidden="true"></div><button class="icon-btn sheet-close" data-act="close" aria-label="Close">${icon("x")}</button></div>` + html;
+  const s = $("#sheet"), c = $("#scrim");
+  if (s.hidden) { s.hidden = false; c.hidden = false; requestAnimationFrame(() => { s.classList.add("open"); c.classList.add("open"); }); s.scrollTop = 0; }
+}
+function closeSheet() {
+  const s = $("#sheet"), c = $("#scrim"); s.classList.remove("open"); c.classList.remove("open"); sheetKind = null; sheetId = null;
+  setTimeout(() => { if (!sheetKind) { s.hidden = true; c.hidden = true; } }, 260);
+}
+function openDetail(id, keep) {
+  const e = BY[id]; if (!e) return;
+  const p = prog(id); const more = CAT.filter(x => x.show === e.show && x.id !== id);
+  const html = `<div class="detail-head" data-id="${id}"><img class="art" src="${esc(e.artwork || "")}" alt=""><div class="ep-text"><p class="eyebrow">${e.year} · ${esc(e.genre)}</p><h2>${esc(e.title)}</h2><p class="detail-show">${esc(e.show)}</p></div></div>
+    <p class="detail-why">${esc(e.why)}</p>
+    <div class="facts"><div class="fact"><span class="k">Aired</span><span class="v">${fmtDate(e.pubDate) || e.year}</span></div><div class="fact"><span class="k">Length</span><span class="v">${fmtDur(e.durationSec) || "—"}</span></div><div class="fact"><span class="k">Status</span><span class="v">${p.done ? "Played" : p.t > 30 ? fmtClock(p.t) + " in" : playable(e) ? "New to you" : "Unavailable"}</span></div></div>
+    ${playable(e) ? `<div class="detail-actions" data-id="${id}">${actionButtons(e, p)}</div>` : `<p class="hint">This episode is no longer in the show's public feed.</p>`}
+    <div class="btn-row"><button class="btn" data-act="follow" data-show="${esc(e.show)}">${icon(isFollowed(e.show) ? "check" : "follow")}${isFollowed(e.show) ? "Following" : "Follow show"}</button>${e.appleShowUrl ? `<a class="btn" href="${esc(e.appleShowUrl)}" target="_blank" rel="noopener">Apple Podcasts${icon("ext")}</a>` : ""}</div>
+    ${e.sources && e.sources.length ? `<div class="detail-section"><p class="eyebrow">Why it's on the list</p><ul class="sources">${e.sources.map(u => `<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(hostOf(u))}${icon("ext")}</a></li>`).join("")}</ul></div>` : ""}
+    ${more.length ? `<div class="detail-section"><p class="eyebrow">More hits from ${esc(e.show)}</p><div class="list">${more.map(x => libRow(x)).join("")}</div></div>` : ""}`;
+  openSheet(html, "detail", id);
+  if (!keep) $("#sheet").scrollTop = 0;
+}
+function openPlayer() {
+  const e = BY[P.id]; if (!e) return;
+  openSheet(`<div class="player">
+    ${P.mode === "radio" && P.station ? `<span class="p-station">${esc(P.station.name)} Radio</span>` : ""}
+    <img class="art big" src="${esc(e.artwork || "")}" alt="">
+    <div><h2>${esc(e.title)}</h2><p class="p-show">${esc(e.show)} · ${e.year}</p></div>
+    <div class="scrub"><label class="sr" for="scrub">Position</label><input type="range" id="scrub" min="0" max="1000" value="0"><div class="times"><span id="tCur">0:00</span><span id="tLeft">-0:00</span></div></div>
+    <div class="transport">
+      <button class="icon-btn skip-lbl" data-act="back15" aria-label="Back 15 seconds">${icon("back")}<small>15</small></button>
+      <button class="big-play" data-act="toggle" id="bigPlay" aria-label="Play"></button>
+      <button class="icon-btn skip-lbl" data-act="fwd30" aria-label="Forward 30 seconds">${icon("fwd")}<small>30</small></button>
+    </div>
+    <div class="p-extra">
+      <button class="btn" data-act="speed" id="speedBtn">${lib.settings.speed || 1}×</button>
+      <button class="btn" data-act="next-any">${icon("next")}${P.mode === "radio" ? "Next on station" : `Next${lib.queue.length ? ` (${lib.queue.length})` : ""}`}</button>
+      <button class="btn" data-act="details" data-id="${e.id}">Details</button>
+    </div>
+  </div>`, "player");
+  renderPlayerControls(); updateScrub();
+}
+function renderPlayerControls() { const b = $("#bigPlay"); if (b) { const pl = !au.paused; b.innerHTML = icon(pl ? "pause" : "play", "fill"); b.setAttribute("aria-label", pl ? "Pause" : "Play"); } }
+let scrubbing = false;
+function updateScrub() {
+  const s = $("#scrub"); if (!s || scrubbing) return;
+  const d = au.duration || BY[P.id]?.durationSec || 0, t = au.currentTime || 0;
+  s.value = d ? Math.round(t / d * 1000) : 0;
+  $("#tCur").textContent = fmtClock(t); $("#tLeft").textContent = "-" + fmtClock(d - t);
+}
+
+/* ================= events ================= */
+document.addEventListener("click", ev => {
+  const t = ev.target.closest("[data-act],[data-tab],[data-genre],[data-year],[data-station],[data-libtab]");
+  if (!t) return;
+  const holder = t.closest("[data-id]"); const id = t.dataset.id || holder?.dataset.id;
+  if (t.dataset.tab) { ui.tab = t.dataset.tab; render(); window.scrollTo(0, 0); return; }
+  if (t.dataset.genre) { ui.genre = t.dataset.genre; ui.shown = 30; return refresh(); }
+  if (t.dataset.year) { const y = +t.dataset.year; ui.year = ui.year === y ? null : y; ui.shown = 30; return refresh(); }
+  if (t.dataset.libtab) { ui.libTab = t.dataset.libtab; return refresh(); }
+  if (t.dataset.station) {
+    const k = t.dataset.station;
+    if (ui.tab === "radio" || (P.mode === "radio" && P.id)) { tune(k); } else { ui.station = k; refresh(); }
+    return;
+  }
+  switch (t.dataset.act) {
+    case "open": case "details": return openDetail(id);
+    case "play":
+      if (P.id === id && !au.paused) return au.pause();
+      if (P.id === id && au.paused && au.src) return au.play().catch(() => {});
+      stopSpeaking(); return playEpisode(id, { mode: "single" });
+    case "queue": return toggleQueue(id);
+    case "save": return toggleSave(id);
+    case "follow": return toggleFollow(t.dataset.show);
+    case "more": ui.shown += 30; return refresh();
+    case "unavail": ui.unavail = !ui.unavail; return refresh();
+    case "air":
+      if (P.mode === "radio" && P.id) { if (P.speaking) { stopSpeaking(); return playEpisode(P.id, { mode: "radio" }); } return togglePlay(); }
+      return tune(ui.station);
+    case "radio-next": stopSpeaking(); return radioAdvance(1);
+    case "q-up": case "q-down": {
+      const i = lib.queue.indexOf(id), j = i + (t.dataset.act === "q-up" ? -1 : 1);
+      if (i < 0 || j < 0 || j >= lib.queue.length) return;
+      [lib.queue[i], lib.queue[j]] = [lib.queue[j], lib.queue[i]]; persist(); return refresh();
+    }
+    case "play-queue": if (lib.queue.length) { stopSpeaking(); playEpisode(lib.queue[0], { mode: "queue" }); } return;
+    case "clear-queue": lib.queue = []; persist(); toast("Up Next cleared"); return refresh();
+    case "close": return closeSheet();
+    case "toggle": return togglePlay();
+    case "back15": return seekBy(-15);
+    case "fwd30": return seekBy(30);
+    case "next-any": return playNext();
+    case "speed": {
+      const opts = [1, 1.2, 1.5, 1.75, 2, 0.8]; const i = opts.indexOf(lib.settings.speed || 1);
+      lib.settings.speed = opts[(i + 1) % opts.length]; au.playbackRate = lib.settings.speed; persist(); t.textContent = lib.settings.speed + "×"; return;
+    }
+    case "export": $("#backup").value = JSON.stringify({ saved: lib.saved, queue: lib.queue, follows: lib.follows, history: lib.history, progress: lib.progress, custom: lib.custom }); return;
+    case "copy": { const v = $("#backup").value || JSON.stringify(lib); navigator.clipboard?.writeText(v).then(() => toast("Backup copied"), () => { $("#backup").select(); toast("Select and copy the text above"); }); return; }
+    case "import": {
+      try { const j = JSON.parse($("#backup").value); ["saved", "queue", "follows", "history", "custom"].forEach(k => { if (Array.isArray(j[k])) lib[k] = j[k]; }); if (j.progress) lib.progress = j.progress; persist(); STATIONS = baseStations(); toast("Library restored"); refresh(); }
+      catch { toast("That backup couldn't be read. Paste the whole thing."); }
+      return;
+    }
+  }
+});
+$("#miniOpen").addEventListener("click", openPlayer);
+$("#miniArt").addEventListener("click", openPlayer);
+$("#miniToggle").addEventListener("click", () => { if (P.speaking) { stopSpeaking(); return playEpisode(P.id, { mode: P.mode }); } togglePlay(); });
+$("#scrim").addEventListener("click", closeSheet);
+document.addEventListener("keydown", e => { if (e.key === "Escape" && sheetKind) closeSheet(); });
+document.addEventListener("input", e => {
+  if (e.target.id === "scrub") { scrubbing = true; const d = au.duration || 0; $("#tCur").textContent = fmtClock(e.target.value / 1000 * d); }
+});
+document.addEventListener("change", e => {
+  const t = e.target;
+  if (t.id === "scrub") { const d = au.duration || 0; if (d) au.currentTime = t.value / 1000 * d; scrubbing = false; }
+  if (t.id === "sort") { ui.sort = t.value; ui.shown = 30; refresh(); }
+  if (t.id === "djToggle") { lib.settings.dj = t.checked; persist(); if (!t.checked) stopSpeaking(); }
+  if (t.id === "speedSel") { lib.settings.speed = +t.value; au.playbackRate = lib.settings.speed; persist(); }
+  if (t.id === "voiceSel") { lib.settings.voice = t.value; persist(); if (t.value) speak("This is how the DJ will sound."); }
+  if (t.id === "keyIn") { lib.settings.apiKey = t.value.trim(); persist(); toast(lib.settings.apiKey ? "Key saved on this device" : "Key removed"); }
+});
+document.addEventListener("submit", async e => {
+  if (e.target.id !== "askForm") return;
+  e.preventDefault();
+  const q = $("#askIn").value.trim(); if (!q) return;
+  const s = $("#askStatus"); s.className = "status"; s.textContent = "Claude is picking episodes…";
+  const btn = e.target.querySelector("button"); btn.disabled = true;
+  try { const st = await makeStation(q); s.textContent = `Made “${st.name}” with ${st.ids.length} episodes.`; tune(st.key); }
+  catch (err) { s.className = "status err"; s.textContent = err.message || "Something went wrong. Try again."; }
+  finally { btn.disabled = false; }
+});
+document.addEventListener("toggle", e => { if (e.target.id === "settings") ui.settingsOpen = e.target.open; }, true);
+window.addEventListener("scroll", () => $("#top").classList.toggle("scrolled", window.scrollY > 4), { passive: true });
+
+/* ================= boot ================= */
+async function boot() {
+  try {
+    const r = await fetch("catalog.json", { cache: "no-cache" });
+    const data = await r.json();
+    META = data.meta || {}; CAT = data.episodes || [];
+  } catch { $("#main").innerHTML = `<div class="empty" style="margin-top:20px"><strong>The catalog didn't load.</strong>Check your connection and reload.</div>`; return; }
+  BY = Object.fromEntries(CAT.map(e => [e.id, e]));
+  // drop library entries for episodes no longer in the catalog
+  lib.saved = lib.saved.filter(id => BY[id]); lib.queue = lib.queue.filter(id => BY[id]);
+  STATIONS = baseStations();
+  if (location.hash === "#radio" || location.hash === "#library") ui.tab = location.hash.slice(1);
+  render();
+}
+boot();
+if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {});
+</script>
+</body>
+</html>

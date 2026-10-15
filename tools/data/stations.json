@@ -1,0 +1,71 @@
+[
+ {"key": "cons", "name": "Cons & Cover-ups", "sub": "Scammers, frauds and the people who caught them",
+  "ids": ["e094", "e093", "e113", "e010", "e164", "e202"],
+  "intros": {
+   "e094": "We start with a phone call most of us hang up on. Alex Goldman stays on the line with a tech-support scammer, then follows the trail all the way to India.",
+   "e093": "Next, a con man in Orange County and the family he nearly destroyed. This one topped the charts for weeks and turned into a TV series.",
+   "e113": "Someone keeps hijacking a teenager's Snapchat account. Reply All goes looking for who, and how.",
+   "e010": "Now a rare thing: a show retracting its own story. This American Life spends a full hour on how it got Mike Daisey's Apple factory account wrong.",
+   "e164": "From the Theranos saga, the final chapter. Elizabeth Holmes and Sunny Balwani get their sentences.",
+   "e202": "And we close with the investigation that won a Pulitzer. Pablo Torre follows the money behind a no-show deal for Kawhi Leonard."
+  }},
+ {"key": "mysteries", "name": "Little Mysteries", "sub": "Small puzzles, chased all the way down",
+  "ids": ["e063", "e075", "e130", "e064", "e092"],
+  "intros": {
+   "e063": "Starlee Kine finds a belt buckle and decides to find its owner. Some critics have called this the best podcast episode ever made.",
+   "e075": "Jonathan Goldstein helps a friend try to get back some CDs he lent to Moby, years before Moby got famous.",
+   "e130": "A man remembers a nineties song that no one else can find. Not on the internet, not anywhere. Reply All goes hunting.",
+   "e064": "Another case from Mystery Show, this one hinging on a single photo of Britney Spears.",
+   "e092": "Finally, the fitness icon who vanished from public life. Dan Taberski goes looking for Richard Simmons."
+  }},
+ {"key": "case", "name": "Case Files", "sub": "Investigations that changed real cases",
+  "ids": ["e049", "e076", "e006", "e066", "e112", "e077", "e119", "e159"],
+  "intros": {
+   "e049": "This is where the modern podcast boom began. Episode one of Serial, and the case of Adnan Syed.",
+   "e076": "In the Dark reopens the Jacob Wetterling case and asks why the sheriff's office never solved it.",
+   "e006": "A New York police officer secretly records his own precinct. What he captured is about quotas.",
+   "e066": "A license plate mix-up, a traffic stop, and everything that went wrong after it.",
+   "e112": "Reply All on the numbers system that drove New York policing, and what it did to the officers inside it.",
+   "e077": "A young woman reports a rape and the police don't believe her. This story later became the Netflix series Unbelievable.",
+   "e119": "In the Dark's second season opens with Curtis Flowers, a man tried six times for the same crime. This reporting fed into a Supreme Court case.",
+   "e159": "And a bookend: eight years after it all started, Serial returns for the day Adnan Syed walks out of court."
+  }},
+ {"key": "design", "name": "Design Brain", "sub": "Buildings, sounds, colors and words",
+  "ids": ["e024", "e025", "e055", "e022", "e088", "e107", "e020", "e106"],
+  "intros": {
+   "e024": "A short one to start. Who designs the sounds your devices make, and why they sound the way they do.",
+   "e025": "Kowloon Walled City, the densest, most lawless neighborhood on earth, and what it looked like from inside.",
+   "e055": "A Manhattan skyscraper with a hidden flaw, and the engineers who fixed it before anyone found out.",
+   "e022": "Why do ancient texts barely mention the color blue? Radiolab goes looking.",
+   "e088": "The Army Corps of Engineers once built a scale model of the entire Mississippi River basin. Here's what happened to it.",
+   "e107": "You used to be able to buy a house from the Sears catalog. It came in the mail.",
+   "e020": "A man reaches adulthood without any language at all, and what that tells us about how words shape thought.",
+   "e106": "And to close, how punk fashion went from homemade rebellion to something you could buy at the mall."
+  }},
+ {"key": "screen", "name": "Screen & Stage", "sub": "Hollywood history and pop moments",
+  "ids": ["e086", "e079", "e116", "e082", "e134", "e140", "e129", "e201"],
+  "intros": {
+   "e086": "Karina Longworth opens her Joan Crawford series, by way of Douglas Fairbanks.",
+   "e079": "You get a car! An oral history of the most famous giveaway in daytime television.",
+   "e116": "Back to Longworth, fact-checking the legends around Hollywood's censorship czar.",
+   "e082": "The day Beyonce dropped Formation, recorded while it was all still happening.",
+   "e134": "Polly Platt helped make some of the great films of the seventies, and almost nobody knew her name.",
+   "e140": "A look back at America's Next Top Model, with someone who was there.",
+   "e129": "The Disney film the company would rather you forgot, and why.",
+   "e201": "And to finish, a record breaker: Taylor Swift announces an album on her boyfriend's podcast."
+  }},
+ {"key": "trail", "name": "The Campaign Trail", "sub": "When candidates sat down with podcasters",
+  "ids": ["e056", "e068", "e122", "e124", "e186", "e189", "e187", "e190", "e191", "e197"],
+  "intros": {
+   "e056": "We start in 2015, when a sitting president sat down in Marc Maron's garage.",
+   "e068": "Later that year, BuzzFeed's Another Round gets Hillary Clinton talking about race and reparations.",
+   "e122": "In 2019, a long-shot candidate named Andrew Yang makes his pitch for a universal basic income on Joe Rogan.",
+   "e124": "A few months later, Bernie Sanders on the same show, and a remark from Rogan that the campaign made the most of.",
+   "e186": "Jump to 2024. Donald Trump talks with Lex Fridman, one of the first stops on his podcast tour.",
+   "e189": "Kamala Harris on Call Her Daddy, a show built for young women, weeks before the election.",
+   "e187": "Trump and Theo Von, a freewheeling conversation that sent the show to number one.",
+   "e190": "Then three hours with Joe Rogan, days before the vote.",
+   "e191": "After the result, Jon Stewart and historian Heather Cox Richardson on what comes next.",
+   "e197": "And in 2025, Gavin Newsom launches his podcast with a guest few expected: Charlie Kirk."
+  }}
+]
